@@ -1,0 +1,136 @@
+div.overlay{
+	position: fixed; /* Sit on top of the page content */
+	display: none;  /*Hidden by default */
+	width: 100vw; /* Full width (cover the whole page) */
+	height: 100vh; /* Full height (cover the whole page) */
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+	z-index: 1; /* Specify a stack order in case you're using a different order for other elements
+	-webkit-transition:all 0.3s ease-in-out;
+	-o-transition:all 0.3s ease-in-out;
+	transition:all 0.3s ease-in-out;*/
+}
+
+div.t-m-4{
+	margin-top: 4rem;
+}
+
+div.container{
+	z-index: 2;
+}
+
+.fl-r{
+	float: right;
+}
+
+div.page-main-header{
+	cursor:pointer;
+	display: inline;
+	-webkit-transition:all .3s ease-in-out;
+	-o-transition:all .3s ease-in-out;
+	transition:all .3s ease-in-out;
+}
+
+div.page-main-header:hover{
+	color: #3366BB;
+}
+
+label.control-label{
+	position:absolute;
+	top:50%;
+	transform:translateY(50%);
+}
+
+@media (max-width:991px) {
+	.separator{
+		margin-top:0.8em;
+	}
+}
+
+@media (max-width:991px) {
+	.separator.inline{
+		margin-top:0.8em;
+	}
+}
+
+@media (max-width:712px) {
+  .separator.inline{
+    margin-top:0.8em;
+    margin-bottom:0.8em;
+    display:inline-block;
+  }
+}
+
+.separator{
+  margin-top:0.8em;
+}
+
+div.separatorLabel{
+  margin-bottom:0.3em;
+}
+
+
+button.btn.btn-default.float-right{
+  float:right;
+}
+
+div#cucv{
+  display:inline;
+  margin:1em;
+}
+
+@media (max-width:767px) {
+  div.separator.inline{
+    display:inline-block;
+  }
+}
+
+label.floating{
+  height:37px;
+  position:absolute;
+  top:50%;
+  transform:translateY(50%);
+}
+
+
+a.headerLink{
+  margin-bottom: 1em;
+	margin-left: 2em;
+  font-size:130%;
+}
+
+div.container{
+  min-width:35rem;
+  max-width:745px;
+}
+
+h3#large-heading{
+  display:none;
+}
+
+@media (max-width:1199px) {
+  h3#small-heading{
+    display:none;
+  }
+}
+
+#login-out-column{
+  float:right;
+}
+
+div.separator2{
+  // margin-top:0.8em;
+  margin-bottom:0.8em;
+}
+
+#btn-login{
+  float: right;
+  margin-right: 2em;
+}
+
+#btn-logout{
+	float: right;
+}

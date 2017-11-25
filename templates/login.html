@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Global Link Rate</title>
+	<style type="text/css">{% include "assets/bootstrap/css/bootstrap.min.css" %}/</style>
+	<style type="text/css">{% include "assets/css/styles.css" %}/</style>
+</head>
+
+<body>
+	<div class="container">
+				<div class="col-md-12">
+						<div class="page-header">
+								<h3 onclick="window.location='/'"><div class="page-main-header">Global Link Rate</div><small> Rate your most and least favorite pages</small></h3></div>
+				</div>
+				<div class="col-lg-5 col-md-4 col-xs-8" id="login-out-column">
+						<div class="separator2"><a href="/login" id="btn-login" class="headerLink">Login </a><a href="/logout" id="btn-logout" class="headerLink">Logout </a></div>
+				</div>
+		</div>
+		<div class="container">
+				<div class="col-md-12">
+						<form method="POST" action='login'>
+								<div class="form-group">
+										<div class="panel panel-default">
+												<div class="panel-heading">
+														<h3 class="panel-title">Login </h3></div>
+												<div class="panel-body">
+														<div class="row">
+																<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+																		<div class="separator">
+																				<label class="control-label">Username: </label>
+																		</div>
+																</div>
+																<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+																		<div class="separator">
+																				<input name='username' class="form-control" type="text">
+																		</div>
+																</div>
+														</div>
+														<div class="row">
+																<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+																		<div class="separator">
+																				<label class="control-label">Password: </label>
+																		</div>
+																</div>
+																<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+																		<div class="separator">
+																				<input name='password' class="form-control" type="password">
+																		</div>
+																</div>
+																<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+																		<div class="separator">
+																				<button class="btn btn-default float-right" type="submit">Log in </button>
+																		</div>
+																</div>
+														</div>
+												</div>
+										</div>
+								</div>
+						</form>
+				</div>
+	</div>
+	<script type="text/javascript">{% include "assets/js/jquery.min.js" %}</script>
+	<script type="text/javascript">{% include "assets/bootstrap/js/bootstrap.min.js" %}</script>
+	<script type="text/javascript">{% include "assets/js/main.js" %}</script>
+</body>
+
+</html>
