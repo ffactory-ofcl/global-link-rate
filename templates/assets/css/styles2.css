@@ -1,0 +1,142 @@
+div.overlay{
+	position: fixed; /* Sit on top of the page content */
+	display: none;  /*Hidden by default */
+	width: 100vw; /* Full width (cover the whole page) */
+	height: 100vh; /* Full height (cover the whole page) */
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+	z-index: 1; /* Specify a stack order in case you're using a different order for other elements
+	-webkit-transition:all 0.3s ease-in-out;
+	-o-transition:all 0.3s ease-in-out;
+	transition:all 0.3s ease-in-out;*/
+}
+
+a.headerLink {
+	margin-left: 2em;
+	font-size: medium;
+}
+
+div.t-m-4{
+	margin-top: 4rem;
+}
+
+div.container{
+	z-index: 2;
+}
+
+.fl-r{
+	float: right;
+}
+
+div.page-main-header{
+	cursor:pointer;
+	display: inline;
+	-webkit-transition:all .3s ease-in-out;
+	-o-transition:all .3s ease-in-out;
+	transition:all .3s ease-in-out;
+}
+
+div.page-main-header:hover{
+	color: #3366BB;
+}
+
+label.control-label{
+	position:absolute;
+	top:50%;
+	transform:translateY(50%);
+}
+
+@media (max-width:991px) {
+	.separator{
+		margin-top:0.8em;
+	}
+}
+
+@media (max-width:991px) {
+	.separator.inline{
+		margin-top:0.8em;
+		margin-bottom:0.8em;
+	}
+}
+
+@media (max-width:767px) {
+	.separator.inline{
+		margin-top:0.8em;
+		margin-bottom:0.8em;
+		display:inline-block;
+	}
+}
+
+.separator{
+	margin-top:0.8em;
+	margin-bottom:0.4em;
+}
+
+div.separatorLabel{
+	margin-bottom:0.3em;
+}
+
+body{
+	min-width:35rem;
+}
+
+div.col-lg-1.col-md-2.col-sm-2.col-xs-3{
+}
+
+button.btn.btn-default.float-right{
+	float:right;
+}
+
+div.hseparator{
+	display:inline;
+	margin:1em;
+}
+
+div#cucv{
+	display:inline;
+	margin:1em;
+}
+
+button.btn.btn-default.button-textbox{
+	float:right;
+}
+
+@media (max-width:767px) {
+	button.btn.btn-default.textboxbutton{
+		float:right;
+	}
+}
+
+div#hseparator{
+	margin:1em;
+	display:inline;
+}
+
+div.separator.inline{
+	display:inline;
+}
+
+@media (max-width:767px) {
+	div.separator.inline{
+		display:inline-block;
+	}
+}
+
+div.row{
+}
+
+div.row.spacer{
+}
+
+div.col-lg-2.col-md-2.col-sm-2.col-xs-4{
+}
+
+label.floating{
+	height:37px;
+	position:absolute;
+	top:50%;
+	transform:translateY(50%);
+}

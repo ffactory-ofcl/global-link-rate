@@ -1,0 +1,12 @@
+--This is only for the api -> javascript needs separation
+Global Link Rate error manual at this time:
+ 1: All good - performed task without error
+ 2: Something is wrong that is an uncommon error
+ 0: Any other error - could be anything
+
+GLR errors proposed:
+ E010203:
+   E:  E: Error | S: Success
+   01:  Number of function that was being run -> TODO number all functions and copy here -> 00: success | -10: unknown
+   02:  Function specific errorCode
+   03:  What kind of error occured -> database/conversion/http -> 01: success | -10: unknown

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Global Link Rate frontend</title>
+	<style type="text/css">{% include "assets/bootstrap/css/bootstrap.min.css" %}/</style>
+	<style type="text/css">{% include "assets/css/styles.css" %}/</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="col-md-12 col-xs-12">
+			<div class="page-header">
+				<h3 onclick="window.location='/'"><div class="page-main-header">Global Link Rate</div><small> Rate your most and least favorite pages</small></h3></div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="col-md-12">
+			<form action="addLinkRating('{{link}}')">
+				<div class="form-group">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">{{user.username}}'s Profile</h3></div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-12">
+									<p>UserID: {{user.userid}}</p>
+								</div>
+								<div class="col-md-12">
+									<p>Role: {{user.role}}</p>
+								</div>
+								<div class="col-md-10">
+									<p>XP: {{user.xp}}</p>
+								</div>
+								<div class="col-md-2">
+									<a href="/">Go back</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">{% include "assets/js/jquery.min.js" %}</script>
+	<script type="text/javascript">{% include "assets/bootstrap/js/bootstrap.min.js" %}</script>
+	<script type="text/javascript">{% include "assets/js/main.js" %}</script>
+</body>
+
+</html>

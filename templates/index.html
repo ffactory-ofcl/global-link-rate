@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Global Link Rate</title>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='assets/img/favicon-512.ico') }}">
+	<style type="text/css">{% include "assets/bootstrap/css/bootstrap.min.css" %}/</style>
+	<style type="text/css">{% include "assets/css/styles.css" %}/</style>
+</head>
+
+<body>
+	<div class="overlay" onclick="">
+		<div class=" container">
+			<div class="col-md-12 t-m-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title" id="panel-title"><!--dynamic input--></h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-11 col-md-9 col-sm-11 col-xs-9">
+								<p class="" id="panel-body"><!--dynamic input--></p>
+							</div>
+							<div class="col-lg-1 col-md-2 col-sm-1 col-xs-3">
+								<button class="btn btn-default fl-r" onclick="hideOverlay()">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+			<div class="col-md-12">
+					<div class="page-header">
+							<h3 onclick="window.location='/'"><div class="page-main-header">Global Link Rate</div><small> Rate your most and least favorite pages</small></h3></div>
+			</div>
+			<div class="col-lg-5 col-md-4 col-xs-8" id="login-out-column">
+					<div class="separator2"><a href="/login" id="btn-login" class="headerLink">Login </a><a href="/logout" id="btn-logout" class="headerLink">Logout </a></div>
+			</div>
+	</div>
+	</div>
+	<div class="container">
+		<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Select page</h3></div>
+					<div class="panel-body">
+						<form onsubmit="return false;">
+							<div class="row">
+								<div class="col-md-10 col-sm-10 col-xs-10">
+									<div class="separator">
+										<input class="form-control" id="linktext" type="url" placeholder="SomePage.com/ThatBlogEntry.html" autocomplete="on" inputmode="url">
+									</div>
+								</div>
+								<!--div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
+									<div class="separator">
+										<button class="btn btn-default float-right" type="submit">Select </button>
+									</div>
+								</div-->
+							</div>
+						</form>
+						<form onsubmit="addLinkRating();return false;">
+							<div class="row">
+								<div class="col-md-2 col-sm-2 col-xs-3">
+									<div class="separatorLabel">
+										<label class="floating">Rate (0-10)</label>
+									</div>
+								</div>
+								<div class="col-md-8 col-sm-8 col-xs-7">
+									<div class="separator">
+										<input class="form-control" type="text" id="ratingtextbox" autocomplete="off" autofocus="">
+									</div>
+								</div>
+								<div class="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+									<div class="separator">
+										<button class="btn btn-default textboxbutton" type="submit">Rate</button>
+									</div>
+								</div>
+							</div>
+						</form>
+						<div class="row spacer">
+							<div class="col-md-12">
+								<hr>
+							</div>
+						</div>
+						<form>
+							<div class="row">
+								<div class="col-md-12 col-xs-12">
+									<!--
+									<div class="separator inline">
+										<button class="btn btn-default" type="button" onclick="calculateRating()">Calculate </button>
+									</div>
+									<div class="hseparator"></div>-->
+									<div class="separator inline">
+										<button class="btn btn-default" type="button" onclick="getRating()">Get user Rating</button>
+									</div>
+								</div>
+							</div>
+						</form>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">{% include "assets/js/jquery.min.js" %}</script>
+	<script type="text/javascript">{% include "assets/bootstrap/js/bootstrap.min.js" %}</script>
+	<script type="text/javascript">{% include "assets/js/main.js" %}</script>
+</body>
+
+</html>
