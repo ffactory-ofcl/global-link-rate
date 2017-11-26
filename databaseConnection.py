@@ -37,7 +37,7 @@ def executeSql(sqlStr, _input='', rowCount=5):
     with connection.cursor() as cursor:
         cursor.execute(sqlStrSanitized)
     connection.commit()
-    #cursor.close()
+    cursor.close()
     return cursor.fetchmany(rowCount)
 
 

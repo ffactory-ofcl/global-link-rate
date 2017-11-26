@@ -131,6 +131,11 @@ def getLinkRating(link):
     return jsonify(api.executeApiAction('getLinkRating', link))
 
 
+@app.route(glrLinkApiPath + 'toplinks')
+def getTopLinkRatings():
+    return jsonify(api.getTopLinkRatings())
+
+
 # end api ---------------------------------------------------------------------
 
 

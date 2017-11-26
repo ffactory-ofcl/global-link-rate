@@ -75,13 +75,41 @@ function getRating() { //get rating for <link> and display in <overlay>
 }
 
 function linktextboxChanged() {
-	generateTopLinkList();
+	//generateTopLinkList();
+}
+
+function generateTopLinkList() {
+var apiLocation='/api/link/toplinks';
+var xhttp = new XMLHttpRequest();
+xhttp.open("GET", apiLocation, true);
+xhttp.setRequestHeader("Content-type", "application/json");
+//showOverlayBody();
+xhttp.onreadystatechange = function() {
+	responseValidity = checkResponseValidity(this);
+	if (responseValidity==1) { //response ok
+		//debugger;
+		//console.log(this.responseText['links']);
+		document.getElementsByClassName("toplinks")[0].innerHTML = '';
+		for(i=0;i<JSON.parse(this.responseText)['links'].length;i++){
+			var parentElement = document.createElement('li');
+			var element = document.createElement('a');
+			element.innerText = JSON.parse(this.responseText)['links'][i]['link'];
+			element.href = JSON.parse(this.responseText)['links'][i]['link'];
+			parentElement.appendChild(element);
+			document.getElementsByClassName("toplinks")[0].appendChild(parentElement)
+		}
+	} else if(responseValidity==2) { //some error
+		//showError(JSON.parse(this.responseText)['errorCode']);
+		alert('REEEE')
+	} else if(responseValidity==3){
+		//showOverlay('Authenication Error','Denied access to api. Are you logged in?')
+		alert('ererere');
+	}
+}
+xhttp.send();
 }
 //end api actions ----------------------------------------------------------------------------------
 
-function generateTopLinkList() {
-
-}
 
 //start tools --------------------------------------------------------------------------------------
 function roundTo(n, digits) { //rounds <n> to <digits> digits
@@ -172,3 +200,5 @@ function checkResponseValidity(response) { //checks for errors in the http respo
 	return errorCode;
 }
 //end checks -------------------------------------------------------------------------------------
+
+generateTopLinkList();
