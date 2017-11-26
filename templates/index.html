@@ -7,6 +7,7 @@
 	<link rel="shortcut icon" href="{{ url_for('static', filename='assets/img/favicon-512.ico') }}">
 	<style type="text/css">{% include "assets/bootstrap/css/bootstrap.min.css" %}/</style>
 	<style type="text/css">{% include "assets/css/styles.css" %}/</style>
+	<!--script src="https://cdn.rawgit.com/lesander/console.history/v1.4.0/console-history.min.js"></script-->
 </head>
 
 <body>
@@ -47,11 +48,12 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">Select page</h3></div>
 					<div class="panel-body">
-						<form onsubmit="return false;">
+						<form onsubmit="">
 							<div class="row">
 								<div class="col-md-10 col-sm-10 col-xs-10">
 									<div class="separator">
-										<input class="form-control" id="linktext" type="url" placeholder="SomePage.com/ThatBlogEntry.html" autocomplete="on" inputmode="url">
+										<input class="form-control" id="linktextbox" autocomplete="on" type="url" inputmode="url"
+										placeholder="http://SomePage.com/ThatBlogEntry.html" onchange="linktextboxChanged();">
 									</div>
 								</div>
 								<!--div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
@@ -100,6 +102,22 @@
 							</div>
 						</form>
 						</div>
+					</div>
+					<div class="panel panel-default hiddenOnStart">
+					    <div class="panel-heading">
+					        <h3 class="panel-title">Select page</h3></div>
+					    <div class="panel-body">
+					        <div class="row">
+					            <div class="col-md-12">
+					                <ul>
+					                    <li>Item 1</li>
+					                    <li>Item 2</li>
+					                    <li>Item 3</li>
+					                    <li>Item 4</li>
+					                </ul>
+					            </div>
+					        </div>
+					    </div>
 					</div>
 				</div>
 			</form>

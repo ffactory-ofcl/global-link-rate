@@ -3,8 +3,11 @@ culsorState = 'default';
 
 //start api actions --------------------------------------------------------------------------------
 function addLinkRating() { //calls the api to rate <link> with rating <rating>
-	var desiredLink=document.getElementById("linktext").value;
+	var desiredLink=document.getElementById("linktextbox").value;
 	var desiredRating=document.getElementById("ratingtextbox").value;
+	if(desiredLink=='' || desiredLink == null || desiredRating == '' || desiredRating == null){
+		showOverlay('Not all fields contain a value','You must enter a valid webpage and a valid rating.');
+	}
 	var apiLocation='/api/link/'+ desiredLink + '/rate:' + desiredRating;
 	// send rate to api
 	var xhttp = new XMLHttpRequest();
@@ -25,7 +28,7 @@ function addLinkRating() { //calls the api to rate <link> with rating <rating>
 }
 
 function calculateRating() { //makes the api calculate the rating for <link>; display confirmation
-	var desiredLink=document.getElementById("linktext").value;
+	var desiredLink=document.getElementById("linktextbox").value;
 	var apiLocation='/api/link/'+ desiredLink + '/calculate';
 
 	// calculate with api
@@ -45,7 +48,7 @@ function calculateRating() { //makes the api calculate the rating for <link>; di
 }
 
 function getRating() { //get rating for <link> and display in <overlay>
-	var desiredLink=document.getElementById("linktext").value;
+	var desiredLink=document.getElementById("linktextbox").value;
 	var apiLocation='/api/link/'+ desiredLink + '/get';
 
 	// calculate with api
@@ -71,8 +74,14 @@ function getRating() { //get rating for <link> and display in <overlay>
 	xhttp.send();
 }
 
+function linktextboxChanged() {
+	generateTopLinkList();
+}
 //end api actions ----------------------------------------------------------------------------------
 
+function generateTopLinkList() {
+
+}
 
 //start tools --------------------------------------------------------------------------------------
 function roundTo(n, digits) { //rounds <n> to <digits> digits
@@ -163,69 +172,3 @@ function checkResponseValidity(response) { //checks for errors in the http respo
 	return errorCode;
 }
 //end checks -------------------------------------------------------------------------------------
-
-
-
-//start outdated functions -----------------------------------------------------------------------
-/*
-
-function checkErrorCodeValidity(errorCode) { //checks if errorCode == 1 duh [deprecated]
-	return (errorCode==1)
-}
-
-function checkLinkValidity(str) { //check if str contains links [deprecated]
-	regex = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/g;
-	let m;
-
-	while ((m = regex.exec(str)) !== null) {
-		if (m.index === regex.lastIndex) {
-			regex.lastIndex++;
-		}
-
-		return (m.lenght>0);
-	}
-}
-
-function redirectTo(link,response) { //redirects the user to <link> if there's no error [deprecated]
-	response = JSON.parse(response);
-	if(response['errorCode']=='1'){
-		window.location=link;
-	}else{
-		//alert('An Error occured. Code: ' + response['errorCode']);
-	}
-}
-
-function redirectToRatedPage(response) {
-	response = JSON.parse(response);
-	if(response['errorCode']=='1'){
-		window.location='/rated';
-	}else{
-		alert('An Error occured. Code: ' + response['errorCode']);
-	}
-}
-
-function redirectToPageControl() {
-	window.location='/'+document.getElementById("linktextbox").value+'/control';
-}
-*/
-//end outdated functions -------------------------------------------------------------------------
-
-
-//start outdated function snippets ---------------------------------------------------------------
-/*
-addlinkrating{if (this.readyState == 4 && this.status == 200 && checkErrorCode(errorCode)) {
-			//redirectTo('/rated',this.responseText);
-			//alert(String.format('Thank you for rating! (Rated {0}/10.)',desiredRating))
-			showOverlay('Rating accepted.',String.format('Thank you for rating! (Rated {0}/10.)',desiredRating));
-		}else{
-			//alert('An Error occured' + this.responseText['errorCode']);
-		}}
-
-getrating{
-	if (this.readyState == 4 && this.status == 200) {
-			redirectTo('/rating/'+JSON.parse(response)['rating'],this.responseText);
-		}else{
-			//alert('An Error occured' + this.responseText['errorCode']);
-		}
-}
-*/

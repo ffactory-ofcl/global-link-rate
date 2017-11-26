@@ -134,3 +134,7 @@ div.separator2{
 #btn-logout{
 	float: right;
 }
+
+.hiddenOnStart{
+	display: none;
+}

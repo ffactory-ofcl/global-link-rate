@@ -23,8 +23,8 @@ def connectToDb():
     connectedToDb = True
 
 
-def executeSql(sqlStr, _input):
-    if _input == '' or _input == None:
+def executeSql(sqlStr, _input='', rowCount=5):
+    if _input == None:  #or _input == ''
         return ()
     ConnectionToDb()
 
@@ -38,7 +38,7 @@ def executeSql(sqlStr, _input):
         cursor.execute(sqlStrSanitized)
     connection.commit()
     #cursor.close()
-    return cursor.fetchall()
+    return cursor.fetchmany(rowCount)
 
 
 #

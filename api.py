@@ -9,10 +9,15 @@ def executeApiAction(functionName, arguments):
 
 
 def addRating(arguments):  #funNum: 1
-    errorCode = None  # 1: ok | 2: error in calculate | 3: pago doesn't exist | 0: unknown
+    errorCode = None  # 1: ok | 2: error in calculate | 3: pago doesn't exist
     link = arguments[0]
     username = arguments[1]
-    rating = arguments[2]
+    rated = arguments[2]
+    allLinkRating = 0
+    allLinkRatingCount = 0
+    rating = 0
+
+    #addRating
     if not check.UrlValidity(link) == 1:
         errorCode = 3
         return {'errorCode': errorCode}
@@ -20,17 +25,46 @@ def addRating(arguments):  #funNum: 1
         "SELECT `id` FROM `users` WHERE `username`='{}'", username)[0]['id']
     databaseConnection.executeSql(
         "INSERT INTO `inputs` ( `userid`,`link`,`rating`) VALUES ('{}', '{}', '{}')",
-        (userid, link, rating))
+        (userid, link, rated))
+
+    #calculateRating
+    isInDbCode = check.IfisInRatingsDb(link)
+    if isInDbCode == 1:  #updates link's entry
+        allLinkRatingAndCount = databaseConnection.executeSql(
+            "SELECT `allLinkRating`,`allLinkRatingCount` FROM `ratings` WHERE `link`='{}'",
+            link)
+        allLinkRating = allLinkRatingAndCount[0]['allLinkRating']
+        allLinkRatingCount = allLinkRatingAndCount[0]['allLinkRatingCount']
+        newAllLinkRating = allLinkRating + rated
+        newAllLinkRatingCount = allLinkRatingCount + 1
+        #raise debugMe('debug')
+        if allLinkRating == None or allLinkRating == 0 or allLinkRating == '' or allLinkRatingCount == None or allLinkRatingCount == 0 or allLinkRatingCount == '':
+            calculateRatings(link)
+        else:
+            rating = (newAllLinkRating) / (newAllLinkRatingCount)
+            databaseConnection.executeSql(
+                "UPDATE ratings SET `rating`='{}', `allLinkRating`='{}', `allLinkRatingCount`='{}' WHERE link='{}'",
+                (rating, newAllLinkRating, newAllLinkRatingCount, link))
+    elif isInDbCode == 2:  # recalculate from all input and insert new entry for new link
+        result = databaseConnection.executeSql(
+            "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'", link)
+        for row in result:
+            allLinkRating = allLinkRating + float(row["rating"])
+            allLinkRatingCount = allLinkRatingCount + 1
+        rating = allLinkRating / allLinkRatingCount  #main rating for this link
+        databaseConnection.executeSql(
+            "INSERT INTO ratings (link,rating,allLinkRating,allLinkRatingCount) VALUES ('{}', '{}', '{}', '{}')",
+            (link, rating, allLinkRating, allLinkRatingCount))
     errorCode = 1
-    if executeApiAction('calculateRatings', [link])['errorCode'] != 1:
-        errorCode = 2
     return {'errorCode': errorCode}
 
 
 def calculateRatings(arguments):
-    link = arguments[0]
+    link = arguments
+    if isinstance(arguments, tuple):
+        link = arguments[0]
     errorCode = None  #1: ok; 2: url invalid
-    allLinkRating = 0.0
+    allLinkRating = 0
     allLinkRatingCount = 0
 
     result = databaseConnection.executeSql(
@@ -38,12 +72,16 @@ def calculateRatings(arguments):
     for row in result:
         allLinkRating = allLinkRating + float(row["rating"])
         allLinkRatingCount = allLinkRatingCount + 1
-    rating = allLinkRating / allLinkRatingCount  #main rating for this link
+    if allLinkRating == None or allLinkRating == 0 or allLinkRating == '' or allLinkRatingCount == None or allLinkRatingCount == 0 or allLinkRatingCount == '':
+        rating = 0
+    else:
+        rating = allLinkRating / allLinkRatingCount  #main rating for this link
 
     isInDbCode = check.IfisInRatingsDb(link)
     if isInDbCode == 1:  #updates link's entry
         databaseConnection.executeSql(
-            "UPDATE ratings SET rating='{}' WHERE link='{}'", (rating, link))
+            "UPDATE ratings SET rating='{}', allLinkRating='{}', allLinkRatingCount='{}' WHERE link='{}'",
+            (rating, allLinkRating, allLinkRatingCount, link))
     elif isInDbCode == 2:  #inserts new entry for new link
         databaseConnection.executeSql(
             "INSERT INTO ratings (link,rating) VALUES ('{}', '{}')",
@@ -65,6 +103,23 @@ def getLinkRating(link):
     return {'errorCode': errorCode, 'rating': rating}
 
 
+def getTopLinkRatings():
+    errorCode = None
+    links = []
+    if check.DbIsNotEmpty('ratings'):
+        result = databaseConnection.executeSql(
+            "SELECT * FROM `ratings` ORDER BY allLinkRatingCount DESC", '', 10)
+        for row in result:
+            links.append(row)
+    errorCode = 1
+    return {'errorCode': errorCode, 'links': links}
+
+
 #end api ----------------------------------------------------------------------
 
-print()
+
+class debugMe(Exception):
+    pass
+
+
+#print(getTopLinkRatings()['links'][0]['link'])

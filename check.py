@@ -21,6 +21,10 @@ def IfisInRatingsDb(link):
     return errorCode
 
 
+def DbIsNotEmpty(table):
+    return databaseConnection.executeSql("SELECT * from `{}`", table, 5) != ''
+
+
 def CallerValidity(caller):
     return caller == 'executeApiAction'
 
