@@ -122,7 +122,8 @@ def addRating(link, rating):
 @app.route(glrLinkApiPath + '<path:link>/calculate', methods=['GET'])
 @login_required
 def calculateLinkRating(link):
-    return jsonify(api.executeApiAction('calculateRatings', tuple([link, ''])))
+    return jsonify(
+        api.executeApiAction('calculateLinkRating', tuple([link, ''])))
 
 
 @app.route(glrLinkApiPath + '<path:link>/get', methods=['GET'])

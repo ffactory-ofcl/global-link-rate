@@ -1,3 +1,9 @@
+
+div.container{
+  min-width:407px;
+  max-width:745px;
+}
+
 div.overlay{
 	position: fixed; /* Sit on top of the page content */
 	display: none;  /*Hidden by default */
@@ -16,6 +22,10 @@ div.overlay{
 
 div.t-m-4{
 	margin-top: 4rem;
+}
+
+div.page-header{
+	margin: 46px 0px 0px;
 }
 
 div.container{
@@ -95,16 +105,20 @@ label.floating{
   transform:translateY(50%);
 }
 
+div.separator2 {
+	text-align: right;
+	padding: 1em 0 1em
+}
 
 a.headerLink{
-  margin-bottom: 1em;
-	margin-left: 2em;
+	margin-right: 2em;
   font-size:130%;
 }
 
-div.container{
-  min-width:35rem;
-  max-width:745px;
+#btn-login{
+}
+
+#btn-logout{
 }
 
 h3#large-heading{
@@ -119,20 +133,6 @@ h3#large-heading{
 
 #login-out-column{
   float:right;
-}
-
-div.separator2{
-  // margin-top:0.8em;
-  margin-bottom:0.8em;
-}
-
-#btn-login{
-  float: right;
-  margin-right: 2em;
-}
-
-#btn-logout{
-	float: right;
 }
 
 .hiddenOnStart{

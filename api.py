@@ -21,9 +21,10 @@ def addRating(arguments):  #funNum: 1
     if not check.UrlValidity(link) == 1:
         errorCode = 3
         return {'errorCode': errorCode}
-    userid = databaseConnection.executeSql(
+    userid = databaseConnection.executeSql(  #get user id
         "SELECT `id` FROM `users` WHERE `username`='{}'", username)[0]['id']
-    databaseConnection.executeSql(
+
+    databaseConnection.executeSql(  #add new input to db
         "INSERT INTO `inputs` ( `userid`,`link`,`rating`) VALUES ('{}', '{}', '{}')",
         (userid, link, rated))
 
@@ -39,7 +40,7 @@ def addRating(arguments):  #funNum: 1
         newAllLinkRatingCount = allLinkRatingCount + 1
         #raise debugMe('debug')
         if allLinkRating == None or allLinkRating == 0 or allLinkRating == '' or allLinkRatingCount == None or allLinkRatingCount == 0 or allLinkRatingCount == '':
-            calculateRatings(link)
+            calculateLinkRating(link)
         else:
             rating = (newAllLinkRating) / (newAllLinkRatingCount)
             databaseConnection.executeSql(
@@ -59,7 +60,7 @@ def addRating(arguments):  #funNum: 1
     return {'errorCode': errorCode}
 
 
-def calculateRatings(arguments):
+def calculateLinkRating(arguments):
     link = arguments
     if isinstance(arguments, tuple):
         link = arguments[0]
@@ -113,6 +114,19 @@ def getTopLinkRatings():
             links.append(row)
     errorCode = 1
     return {'errorCode': errorCode, 'links': links}
+
+
+def calculateAllLinks():
+    errorCode = None
+    #get all links
+    if check.DbIsNotEmpty('ratings'):
+        result = databaseConnection.executeSql("SELECT link FROM `ratings`",
+                                               '', 'all')
+        for row in result:
+            calculateLinkRating(row)
+
+    errorCode = 1
+    return {'errorCode': errorCode}
 
 
 #end api ----------------------------------------------------------------------

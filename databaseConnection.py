@@ -38,7 +38,10 @@ def executeSql(sqlStr, _input='', rowCount=5):
         cursor.execute(sqlStrSanitized)
     connection.commit()
     cursor.close()
-    return cursor.fetchmany(rowCount)
+    if rowCount == 'all':
+        return cursor.fetchall()
+    else:
+        return cursor.fetchmany(rowCount)
 
 
 #

@@ -16,15 +16,15 @@
 			<div class="col-md-12 t-m-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title" id="panel-title"><!--dynamic input--></h3>
+						<h3 class="panel-title" id="panel-title">...</h3>
 					</div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-11 col-md-9 col-sm-11 col-xs-9">
-								<p class="" id="panel-body"><!--dynamic input--></p>
+								<p class="" id="panel-body">...</p>
 							</div>
 							<div class="col-lg-1 col-md-2 col-sm-1 col-xs-3">
-								<button class="btn btn-default fl-r" onclick="hideOverlay()">Close</button>
+								<button class="btn btn-default fl-r" id="closeOverlayButton" onclick="hideOverlay()">Close</button>
 							</div>
 						</div>
 					</div>
@@ -35,10 +35,10 @@
 	<div class="container">
 			<div class="col-md-12">
 					<div class="page-header">
-							<h3 onclick="window.location='/'"><div class="page-main-header">Global Link Rate</div><small> Rate your most and least favorite pages</small></h3></div>
+							<h3><div class="page-main-header"  onclick="window.location='/'">Global Link Rate</div><small> Rate your most and least favorite pages</small></h3></div>
 			</div>
 			<div class="col-lg-5 col-md-4 col-xs-8" id="login-out-column">
-					<div class="separator2"><a href="/login" id="btn-login" class="headerLink">Login </a><a href="/logout" id="btn-logout" class="headerLink">Logout </a></div>
+					<div class="separator2"><a href="/login" id="btn-login" class="headerLink" tabindex="6">Login </a><a href="/logout" id="btn-logout" class="headerLink" tabindex="5">Logout </a></div>
 			</div>
 	</div>
 	</div>
@@ -53,7 +53,7 @@
 								<div class="col-md-10 col-sm-10 col-xs-10">
 									<div class="separator">
 										<input class="form-control" id="linktextbox" autocomplete="on" type="url" inputmode="url"
-										placeholder="http://SomePage.com/ThatBlogEntry.html" onchange="linktextboxChanged();">
+										placeholder="http://SomePage.com/ThatBlogEntry.html" onchange="linktextboxChanged();" autofocus tabindex="1">
 									</div>
 								</div>
 								<!--div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
@@ -72,12 +72,12 @@
 								</div>
 								<div class="col-md-8 col-sm-8 col-xs-7">
 									<div class="separator">
-										<input class="form-control" type="text" id="ratingtextbox" autocomplete="off" autofocus="">
+										<input class="form-control" type="text" id="ratingtextbox" autocomplete="off" tabindex="2">
 									</div>
 								</div>
 								<div class="col-lg-1 col-md-2 col-sm-2 col-xs-4">
 									<div class="separator">
-										<button class="btn btn-default textboxbutton" type="submit">Rate</button>
+										<button class="btn btn-default textboxbutton" type="submit" tabindex="3">Rate</button>
 									</div>
 								</div>
 							</div>
@@ -96,7 +96,7 @@
 									</div>
 									<div class="hseparator"></div>-->
 									<div class="separator inline">
-										<button class="btn btn-default" type="button" onclick="getRating()">Get user Rating</button>
+										<button class="btn btn-default" type="button" onclick="getRating()" tabindex="4">Get user Rating</button>
 									</div>
 								</div>
 							</div>
@@ -105,13 +105,13 @@
 					</div>
 					<div class="panel panel-default">
 					    <div class="panel-heading">
-					        <h3 class="panel-title">Select page</h3></div>
+					        <h3 class="panel-title">Top three links of all time</h3></div>
 					    <div class="panel-body">
 					        <div class="row">
 					            <div class="col-md-12">
-					                <ul class="toplinks">
-					                    <li>Start typing a valid url...</li>
-					                </ul>
+					                <ol class="toplinks">
+					                    <p id="topLinksLoadingPlaceholder">Loading...</p>
+					                </ol>
 					            </div>
 					        </div>
 					    </div>

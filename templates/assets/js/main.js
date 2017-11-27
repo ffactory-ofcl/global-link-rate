@@ -58,11 +58,6 @@ function getRating() { //get rating for <link> and display in <overlay>
 	showOverlayBody();
 	xhttp.onreadystatechange = function() {
 		responseValidity = checkResponseValidity(this);
-		/*if (responseValidity==1) {
-			showOverlay('Average rating.',makeSomeLinks(String.format('On average, '+desiredLink + ' was rated {0}/10.',JSON.parse(this.responseText)['rating'].toFixed(1))));
-		} else if(responseValidity==0) {
-			showError(JSON.parse(this.responseText)['errorCode']);
-		}*/
 		if (responseValidity==1) { //response ok
 			showOverlay('Average rating.',makeSomeLinks(String.format('On average, '+desiredLink + ' was rated {0}/10.',JSON.parse(this.responseText)['rating'].toFixed(1))));
 		} else if(responseValidity==2) { //some error
@@ -79,34 +74,37 @@ function linktextboxChanged() {
 }
 
 function generateTopLinkList() {
-var apiLocation='/api/link/toplinks';
-var xhttp = new XMLHttpRequest();
-xhttp.open("GET", apiLocation, true);
-xhttp.setRequestHeader("Content-type", "application/json");
-//showOverlayBody();
-xhttp.onreadystatechange = function() {
-	responseValidity = checkResponseValidity(this);
-	if (responseValidity==1) { //response ok
-		//debugger;
-		//console.log(this.responseText['links']);
-		document.getElementsByClassName("toplinks")[0].innerHTML = '';
-		for(i=0;i<JSON.parse(this.responseText)['links'].length;i++){
-			var parentElement = document.createElement('li');
-			var element = document.createElement('a');
-			element.innerText = JSON.parse(this.responseText)['links'][i]['link'];
-			element.href = JSON.parse(this.responseText)['links'][i]['link'];
-			parentElement.appendChild(element);
-			document.getElementsByClassName("toplinks")[0].appendChild(parentElement)
+		var apiLocation='/api/link/toplinks';
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("GET", apiLocation, true);
+		xhttp.setRequestHeader("Content-type", "application/json");
+		//showOverlayBody();
+		xhttp.onreadystatechange = function() {
+			try {
+				responseValidity = checkResponseValidity(this);
+				if (responseValidity==1 && this.responseText != '' && this.responseText != null) { //response ok
+					//debugger;
+					document.getElementsByClassName("toplinks")[0].innerHTML = '';
+					for(i=0;i<JSON.parse(this.responseText)['links'].length;i++){
+						var parentElement = document.createElement('li');
+						var element = document.createElement('a');
+						element.innerText = JSON.parse(this.responseText)['links'][i]['link'];
+						element.href = JSON.parse(this.responseText)['links'][i]['link'];
+						parentElement.appendChild(element);
+						document.getElementsByClassName("toplinks")[0].appendChild(parentElement)
+					}
+				} else if(responseValidity==2) { //some error
+					//showError(JSON.parse(this.responseText)['errorCode']);
+					throw('test');
+				} else if(responseValidity==3){
+					//showOverlay('Authenication Error','Denied access to api. Are you logged in?')
+					alert('ererere');
+				}
+			} catch (e) {
+				document.getElementById('topLinksLoadingPlaceholder').innerText = 'An error occured while loading the links...'
+			}
 		}
-	} else if(responseValidity==2) { //some error
-		//showError(JSON.parse(this.responseText)['errorCode']);
-		alert('REEEE')
-	} else if(responseValidity==3){
-		//showOverlay('Authenication Error','Denied access to api. Are you logged in?')
-		alert('ererere');
-	}
-}
-xhttp.send();
+		xhttp.send();
 }
 //end api actions ----------------------------------------------------------------------------------
 
@@ -170,6 +168,7 @@ function showOverlay(title,body){ //shows the overlay with the given title and b
 
 		$('.overlay').fadeIn('fast');
 		overlayActive = true;
+		document.getElementById('closeOverlayButton').focus();
 	//}
 }
 
