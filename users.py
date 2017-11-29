@@ -1,6 +1,7 @@
 #from flask import render_template
+#from flask import render_template
 from userClass import User
-import databaseConnection
+from databaseConnection import executeSql
 
 
 def showProfile(username):
@@ -17,18 +18,25 @@ def getUserinformation(username):
 
 
 def getRawUserdataFromDb(username):
-    return databaseConnection.executeSql(
-        "SELECT * FROM `users` WHERE `username`='{}'", username)[0]
+    return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+                      username)[0]
 
 
-def gainXP(username, xpAmount):
-    currentXP = databaseConnection.executeSql(
-        "SELECT xp FROM `users` WHERE username = '{}'", username)[0]['xp']
-    newXP = currentXP + xpAmount
-    #print(currentXP[0]['xp'])
-    if databaseConnection.executeSql(
-            "UPDATE users SET xp='{}' WHERE username='{}'",
-        (newXP, username)) == ():
-        return True
-    else:
-        return False
+def getUsernameFromId(userid):
+    return executeSql("SELECT username FROM `users` WHERE `id`='{}'",
+                      userid)[0]['username']
+
+
+def getUseridFromUsername(username):
+    return executeSql("SELECT id FROM `users` WHERE `username`='{}'",
+                      username)[0]['id']
+
+
+# class User(UserMixin):
+# pass
+
+#user = User()
+#user.id2 = 'ud'
+#print(user.id2)
+#def gainXP(username):
+#   pass

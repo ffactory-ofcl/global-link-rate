@@ -1,6 +1,7 @@
 class User:
-    def __init__(self, userid, username, role, xp):
-        self.userid = userid
-        self.username = username
-        self.role = role
-        self.xp = xp
+    pass
+    # def __init__(self, userid, username, role, xp, is_authenticated):
+    # self.userid = userid
+    # self.username = username
+    # self.role = role
+    # self.xp = xp

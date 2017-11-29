@@ -200,4 +200,4 @@ function checkResponseValidity(response) { //checks for errors in the http respo
 }
 //end checks -------------------------------------------------------------------------------------
 
-generateTopLinkList();
+if(document.getElementById('topLinksLoadingPlaceholder') != null){generateTopLinkList();}
