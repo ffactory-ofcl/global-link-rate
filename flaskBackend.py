@@ -37,24 +37,29 @@ def protected():
 
 
 # start link api --------------------------------------------------------------
-@app.route(glrLinkApiPath + '<path:link>/rate:<int:rating>', methods=['GET'])
+@app.route(glrLinkApiPath + 'rate', methods=['POST'])
 @login_required
-def addRating(link, rating):
+def addRating():
+    link = request.json['link']
+    rating = request.json['rating']
+
     return jsonify(
-        linkApi.executeApiAction('addRating',
-                                 [link, flask_login.current_user.id, rating]))
+        linkApi.executeApiAction(
+            'addRating',
+            (link, flask_login.current_user.id, rating)))  #'ffactory'
 
 
-@app.route(glrLinkApiPath + '<path:link>/calculate', methods=['GET'])
+@app.route(glrLinkApiPath + 'calculate', methods=['POST'])
 @login_required
-def calculateLinkRating(link):
-    return jsonify(
-        linkApi.executeApiAction('calculateLinkRating', tuple([link, ''])))
+def calculateLinkRating():
+    link = request.json['link']
+    return jsonify(linkApi.executeApiAction('calculateLinkRating', (link, '')))
 
 
-@app.route(glrLinkApiPath + '<path:link>/get', methods=['GET'])
+@app.route(glrLinkApiPath + 'get', methods=['POST'])
 @login_required
-def getLinkRating(link):
+def getLinkRating():
+    link = request.json['link']
     return jsonify(linkApi.executeApiAction('getLinkRating', link))
 
 
@@ -160,7 +165,7 @@ def redirectToIndex():
     return redirect('/')
 
 
-@app.route(glrLinkApiPath + '<path:link>')
+#@app.route(glrLinkApiPath + '<path:link>')
 def redirectToRate(link):
     return redirect(glrLinkApiPath + link + '/get')
 

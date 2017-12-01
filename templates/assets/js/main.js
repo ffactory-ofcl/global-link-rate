@@ -2,20 +2,28 @@ overlayActive = false;
 culsorState = 'default';
 
 //start api actions --------------------------------------------------------------------------------
-function addLinkRating() { //calls the api to rate <link> with rating <rating>
-	var desiredLink=document.getElementById("linktextbox").value;
-	var desiredRating=document.getElementById("ratingtextbox").value;
+function addLinkRating() { //calls the api to rate <link> with rating <rating> 'link':desiredLink,'rating':desiredRating
+	var apiLocation='/api/link/rate';
+	//debugger;
+	var data = {};
+	var desiredLink = document.getElementById('linktextbox').value;
+	var desiredRating = document.getElementById('ratingtextbox').value;
+	data['link'] = desiredLink;
+	data['rating'] = desiredRating;
+
 	if(desiredLink=='' || desiredLink == null || desiredRating == '' || desiredRating == null){
 		showOverlay('Not all fields contain a value','You must enter a valid webpage and a valid rating.');
 	}
-	var apiLocation='/api/link/'+ desiredLink + '/rate:' + desiredRating;
+
 	// send rate to api
 	var xhttp = new XMLHttpRequest();
-	xhttp.open("GET", apiLocation, true);
+	xhttp.open("POST", apiLocation, true);
 	xhttp.setRequestHeader("Content-type", "application/json");
 	showOverlayBody();
 	xhttp.onreadystatechange = function() {
+		//debugger;
 		responseValidity = checkResponseValidity(this);
+		//console.log(this.responseText);
 		if (responseValidity==1) { //response ok
 			showOverlay('Rating accepted.',makeSomeLinks(String.format('Thank you for rating! (Rated {0}/10)',desiredRating)));
 		} else if(responseValidity==2) { //some error
@@ -24,16 +32,23 @@ function addLinkRating() { //calls the api to rate <link> with rating <rating>
 			showOverlay('Authenication Error','Denied access to api. Are you logged in?')
 		}
 	}
-	xhttp.send();
+	//debugger;
+	xhttp.send(JSON.stringify(data));
 }
 
 function calculateRating() { //makes the api calculate the rating for <link>; display confirmation
-	var desiredLink=document.getElementById("linktextbox").value;
-	var apiLocation='/api/link/'+ desiredLink + '/calculate';
+	var apiLocation='/api/link/calculate';
+	var data = {};
+	desiredLink=document.getElementById("linktextbox").value;
+	data['link'] = desiredLink;
+
+	if(desiredLink=='' || desiredLink == null){
+		showOverlay('Not all fields contain a value','You must enter a valid webpage and a valid rating.');
+	}
 
 	// calculate with api
 	var xhttp = new XMLHttpRequest();
-	xhttp.open("GET", apiLocation, true);
+	xhttp.open("POST", apiLocation, true);
 	xhttp.setRequestHeader("Content-type", "application/json");
 	showOverlayBody();
 	xhttp.onreadystatechange = function() {
@@ -44,16 +59,22 @@ function calculateRating() { //makes the api calculate the rating for <link>; di
 			showError(JSON.parse(this.responseText)['errorCode']);
 		}
 	}
-	xhttp.send();
+	xhttp.send(JSON.stringify(data));
 }
 
 function getRating() { //get rating for <link> and display in <overlay>
+	var apiLocation='/api/link/get';
+	var data = {};
 	var desiredLink=document.getElementById("linktextbox").value;
-	var apiLocation='/api/link/'+ desiredLink + '/get';
+	data['link'] = desiredLink;
+
+	if(desiredLink=='' || desiredLink == null){
+		showOverlay('Not all fields contain a value','You must enter a valid webpage and a valid rating.');
+	}
 
 	// calculate with api
 	var xhttp = new XMLHttpRequest();
-	xhttp.open("GET", apiLocation, true);
+	xhttp.open("POST", apiLocation, true);
 	xhttp.setRequestHeader("Content-type", "application/json");
 	showOverlayBody();
 	xhttp.onreadystatechange = function() {
@@ -66,7 +87,7 @@ function getRating() { //get rating for <link> and display in <overlay>
 			showOverlay('Authenication Error','Denied access to api. Are you logged in?')
 		}
 	}
-	xhttp.send();
+	xhttp.send(JSON.stringify(data));
 }
 
 function linktextboxChanged() {

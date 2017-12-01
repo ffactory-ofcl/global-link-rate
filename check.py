@@ -30,10 +30,20 @@ def CallerValidity(caller):
 
 
 def RatingValidity(rating):
-    if type(rating) == int and (0 <= rating <= 10):
-        return True
+    #errorCodes: 1 ok | 2 rating invalid | 3 invalid type
+    try:
+        rating = int(rating)
+    except:
+        return 0
+
+    if type(rating) == int:
+        if 0 <= rating <= 10:
+            return 1
+        else:
+            return 2
     else:
-        return False
+        return 3
+    return 0
 
 
 def UrlValidity(link):
@@ -72,4 +82,7 @@ def IfUsernameIsInDatabase(username):
         "SELECT * FROM `users` WHERE `username`='{}'", username) != ()
 
 
-#print(UrlValidity('http://google.com'))
+# rating = ('2', '3')
+#print(RatingValidity(('3')))
+# if type(rating) == str:
+# rating = int(rating)

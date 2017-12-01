@@ -10,16 +10,25 @@ def executeApiAction(functionName, arguments=None):
 
 
 def addRating(arguments):  #funNum: 1
-    errorCode = None  # 1: ok | 2: error in calculate | 3: pago doesn't exist
+    errorCode = None  # 1: ok | 2: error in calculate | 3: page doesn't exist | 4: invalid arg
+    #return (arguments)
     link = arguments[0]
     username = arguments[1]
     rated = arguments[2]
+    #return str(type(rated))
     allLinkRating = 0
     allLinkRatingCount = 0
     rating = 0
 
+    #convert rating
+    try:
+        rated = int(rated)
+    except:
+        errorCode = 4
+        return {'errorCode': errorCode}
+
     #addRating
-    if not check.UrlValidity(link) == 1 or not check.RatingValidity(rated):
+    if not check.UrlValidity(link) == 1 or not check.RatingValidity(rated) == 1:
         errorCode = 3
         return {'errorCode': errorCode}
     userid = databaseConnection.executeSql(  #get user id
@@ -37,16 +46,30 @@ def addRating(arguments):  #funNum: 1
             link)
         allLinkRating = allLinkRatingAndCount[0]['allLinkRating']
         allLinkRatingCount = allLinkRatingAndCount[0]['allLinkRatingCount']
-        newAllLinkRating = allLinkRating + rated
-        newAllLinkRatingCount = allLinkRatingCount + 1
-        #raise debugMe('debug')
-        if allLinkRating == None or allLinkRating == 0 or allLinkRating == '' or allLinkRatingCount == None or allLinkRatingCount == 0 or allLinkRatingCount == '':
-            calculateLinkRating(link)
-        else:
-            rating = (newAllLinkRating) / (newAllLinkRatingCount)
+        if allLinkRating == None or allLinkRatingCount == None:  #if link exists but has no alllinkrating/count
+            allLinkRating = 0
+            allLinkRatingCount = 0
+            result = databaseConnection.executeSql(
+                "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'",
+                link)
+            for row in result:
+                allLinkRating = allLinkRating + float(row["rating"])
+                allLinkRatingCount = allLinkRatingCount + 1
+            rating = allLinkRating / allLinkRatingCount  #main rating for this link
             databaseConnection.executeSql(
-                "UPDATE ratings SET `rating`='{}', `allLinkRating`='{}', `allLinkRatingCount`='{}' WHERE link='{}'",
-                (rating, newAllLinkRating, newAllLinkRatingCount, link))
+                "INSERT INTO ratings (link,rating,allLinkRating,allLinkRatingCount) VALUES ('{}', '{}', '{}', '{}')",
+                (link, rating, allLinkRating, allLinkRatingCount))
+        else:
+            newAllLinkRating = allLinkRating + rated
+            newAllLinkRatingCount = allLinkRatingCount + 1
+            #raise debugMe('debug')
+            if allLinkRating == None or allLinkRating == 0 or allLinkRating == '' or allLinkRatingCount == None or allLinkRatingCount == 0 or allLinkRatingCount == '':
+                calculateLinkRating(link)
+            else:
+                rating = (newAllLinkRating) / (newAllLinkRatingCount)
+                databaseConnection.executeSql(
+                    "UPDATE ratings SET `rating`='{}', `allLinkRating`='{}', `allLinkRatingCount`='{}' WHERE link='{}'",
+                    (rating, newAllLinkRating, newAllLinkRatingCount, link))
     elif isInDbCode == 2:  # recalculate from all input and insert new entry for new link
         result = databaseConnection.executeSql(
             "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'", link)
@@ -57,6 +80,8 @@ def addRating(arguments):  #funNum: 1
         databaseConnection.executeSql(
             "INSERT INTO ratings (link,rating,allLinkRating,allLinkRatingCount) VALUES ('{}', '{}', '{}', '{}')",
             (link, rating, allLinkRating, allLinkRatingCount))
+    else:
+        errorCode = 0
     errorCode = 1
     return {'errorCode': errorCode}
 
@@ -132,3 +157,6 @@ def calculateAllLinks():
 
 class debugMe(Exception):
     pass
+
+
+print(check.RatingValidity('3'))

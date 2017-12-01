@@ -1,0 +1,10 @@
+[Read with soft wrap on]
+[linkApi.py and userApi.py are examples for all I say]
+
+How should the urls be built?
+I'm glad you asked, now listen carefully. The links for api and frontend must follow a very specific pattern that was written in stone many, many moons ago.
+
+When an api component differs a lot from another, it should get its own file/module, I don't know what it's called. This must be named
+<name_of_api_component>Api.py [see linkApi.py and userApi.py]
+
+These must then be imported into flaskBackend.py and can be called from there as a link is visited. ['/api/get' gets link info]
