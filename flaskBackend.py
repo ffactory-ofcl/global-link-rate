@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify
 import flask_login
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
-import linkApi, userApi, check, users
+import linkApi, userApi, check, users, log
 
 glrLinkApiPath = '/api/link/'
 glrUserApiPath = '/api/user/<string:username>/'
@@ -40,32 +40,59 @@ def protected():
 @app.route(glrLinkApiPath + 'rate', methods=['POST'])
 @login_required
 def addRating():
+    username = flask_login.current_user.id
     link = request.json['link']
     rating = request.json['rating']
 
-    return jsonify(
-        linkApi.executeApiAction(
-            'addRating',
-            (link, flask_login.current_user.id, rating)))  #'ffactory'
+    apiResponse = linkApi.executeApiAction('addRating',
+                                           (username, link, rating))
+    errorCode = apiResponse['errorCode']
+
+    log.writeLog(username, 'Add rating for {} ({}/10)'.format(link, rating),
+                 errorCode)
+    #else:
+    #    log.writeLog(username, 'Calculating for {} failed.'.format(link),errorCode)
+    return jsonify(apiResponse)  #'ffactory'
 
 
 @app.route(glrLinkApiPath + 'calculate', methods=['POST'])
 @login_required
 def calculateLinkRating():
+    username = flask_login.current_user.id
     link = request.json['link']
-    return jsonify(linkApi.executeApiAction('calculateLinkRating', (link, '')))
+
+    apiResponse = linkApi.executeApiAction('calculateLinkRating', (link, ''))
+    errorCode = apiResponse['errorCode']
+
+    log.writeLog(username, 'Calculate rating for {}'.format(link), errorCode)
+    return jsonify(apiResponse)
 
 
 @app.route(glrLinkApiPath + 'get', methods=['POST'])
 @login_required
 def getLinkRating():
+    username = flask_login.current_user.id
     link = request.json['link']
-    return jsonify(linkApi.executeApiAction('getLinkRating', link))
+
+    apiResponse = linkApi.executeApiAction('getLinkRating', link)
+    errorCode = apiResponse['errorCode']
+
+    log.writeLog(username, 'Get rating for {}'.format(link), errorCode)
+    return jsonify(apiResponse)
 
 
 @app.route(glrLinkApiPath + 'toplinks')
 def getTopLinkRatings():
-    return jsonify(linkApi.executeApiAction('getTopLinkRatings'))
+    try:
+        username = flask_login.current_user.id
+    except:
+        username = 'anonymous_user'
+
+    apiResponse = linkApi.executeApiAction('getTopLinkRatings')
+    errorCode = apiResponse['errorCode']
+
+    log.writeLog(username, 'Get top links', errorCode)
+    return jsonify(apiResponse)
 
 
 # end link api ----------------------------------------------------------------

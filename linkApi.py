@@ -1,4 +1,4 @@
-import check, databaseConnection
+import check, databaseConnection  #, log
 
 
 def executeApiAction(functionName, arguments=None):
@@ -12,8 +12,8 @@ def executeApiAction(functionName, arguments=None):
 def addRating(arguments):  #funNum: 1
     errorCode = None  # 1: ok | 2: error in calculate | 3: page doesn't exist | 4: invalid arg
     #return (arguments)
-    link = arguments[0]
-    username = arguments[1]
+    username = arguments[0]
+    link = arguments[1]
     rated = arguments[2]
     #return str(type(rated))
     allLinkRating = 0
@@ -27,13 +27,17 @@ def addRating(arguments):  #funNum: 1
         errorCode = 4
         return {'errorCode': errorCode}
 
-    #addRating
-    if not check.UrlValidity(link) == 1 or not check.RatingValidity(rated) == 1:
+    if not check.RatingValidity(rated) == 1:
+        errorCode = 3
+        return {'errorCode': errorCode}
+
+    if not check.UrlValidity(link) == 1:
         errorCode = 3
         return {'errorCode': errorCode}
     userid = databaseConnection.executeSql(  #get user id
         "SELECT `id` FROM `users` WHERE `username`='{}'", username)[0]['id']
 
+    #addRating
     databaseConnection.executeSql(  #add new input to db
         "INSERT INTO `inputs` ( `userid`,`link`,`rating`) VALUES ('{}', '{}', '{}')",
         (userid, link, rated))
@@ -82,6 +86,7 @@ def addRating(arguments):  #funNum: 1
             (link, rating, allLinkRating, allLinkRatingCount))
     else:
         errorCode = 0
+
     errorCode = 1
     return {'errorCode': errorCode}
 
@@ -135,7 +140,7 @@ def getTopLinkRatings():
     links = []
     if check.DbIsNotEmpty('ratings'):
         result = databaseConnection.executeSql(
-            "SELECT * FROM `ratings` ORDER BY allLinkRatingCount DESC", '', 3)
+            "SELECT * FROM `ratings` ORDER BY allLinkRating DESC", '', 3)
         for row in result:
             links.append(row)
     errorCode = 1
