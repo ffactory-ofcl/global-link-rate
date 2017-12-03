@@ -1,4 +1,5 @@
-import urllib.request, urllib.error, databaseConnection
+import urllib.request, urllib.error
+from databaseConnection import executeSql
 
 # def BeforeApi(link):
 #errorCode = None
@@ -12,8 +13,8 @@ import urllib.request, urllib.error, databaseConnection
 def IfisInRatingsDb(link):
     #ConnectionToDb()
     errorCode = None  #0: unknown; 1:is in db; 2: isnt in db
-    fetchedResults = databaseConnection.executeSql(
-        "SELECT * FROM `ratings` WHERE `link`='{}'", link)
+    fetchedResults = executeSql("SELECT * FROM `ratings` WHERE `link`='{}'",
+                                link)
     if not fetchedResults:
         errorCode = 2
     else:
@@ -22,7 +23,7 @@ def IfisInRatingsDb(link):
 
 
 def DbIsNotEmpty(table):
-    return databaseConnection.executeSql("SELECT * from `{}`", table, 5) != ''
+    return executeSql("SELECT * from `{}`", table, 5) != ''
 
 
 def CallerValidity(caller):
@@ -64,9 +65,9 @@ def UrlValidity(link):
 def UsernameAndPasswordValidity(username, password):
     #ConnectionToDb()
     errorCode = None  # 0: unknown; 1:username+pw correct; 2: no user with this name; 3: pw wrong
-    fetchedResults = databaseConnection.executeSql(
-        "SELECT * FROM `users` WHERE `username`='{}'", username)
-    if not fetchedResults:
+    fetchedResults = executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+                                username)
+    if fetchedResults == ():
         errorCode = 2
     else:
         for row in fetchedResults:
@@ -78,8 +79,8 @@ def UsernameAndPasswordValidity(username, password):
 
 
 def IfUsernameIsInDatabase(username):
-    return databaseConnection.executeSql(
-        "SELECT * FROM `users` WHERE `username`='{}'", username) != ()
+    return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+                      username) != ()
 
 
 # rating = ('2', '3')

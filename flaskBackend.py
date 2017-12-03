@@ -18,7 +18,12 @@ if __name__ == "__main__":
 # start frontend --------------------------------------------------------------
 @app.route('/')
 def index():
-    return render_template('index.html')
+    try:
+        username = flask_login.current_user.id
+    except:
+        username = 'anonymous_user'
+
+    return render_template('index.html', username=username)
 
 
 @app.route('/user/<string:username>')
@@ -131,18 +136,48 @@ def user_loader(username):
 def request_loader(request):
     user = None
     username = request.form.get('username')
-    if not check.IfUsernameIsInDatabase(username):
+
+    if not users.userExists(username):
         return
 
     user = User()
     user.id = username
-
+    #password = request.form['password']
     # DO NOT ever store passwords in plaintext and always compare password
     # hashes using constant-time comparison!
     usernameValidCode = check.UsernameAndPasswordValidity(
         username, request.form['password'])
-    user.is_authenticated = usernameValidCode
+    user.is_authenticated = (usernameValidCode == 1)
+    #flask_login.user(user)
+    #log.writeLog(username, 'Log in.', 1)
     return user
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
+    username = request.form['username']
+    password = request.form['password']
+    errorCode = 0
+    if not users.userExists(username):
+        errorCode = users.registerUser(username, password)
+        #check.UsernameAndPasswordValidity(username, password)
+        usernameValidCode = (errorCode == 1)
+        if usernameValidCode:
+            user = User()
+            user.id = username
+            login_user(user)
+            return render_template(
+                'simpleResponse.html',
+                response='Registered ' + flask_login.current_user.id,
+                title='Registered.'
+            )  #'<p>Logged in as ' + flask_login.current_user.id + '</p>'
+
+    return render_template(
+        'simpleResponse.html',
+        response='An error occurred while trying to register.',
+        title='Error while registering')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -164,13 +199,18 @@ def login():
         user = User()
         user.id = username
         login_user(user)
+        username = flask_login.current_user.id
+        log.writeLog(username, 'Log in.', 1)
         return render_template(
             'simpleResponse.html',
             response='You were logged in as ' + flask_login.current_user.id,
             title='Logged in.'
         )  #'<p>Logged in as ' + flask_login.current_user.id + '</p>'
-
-    return 'Bad login'
+    log.writeLog(username, 'Log in.', 0)
+    return render_template(
+        'simpleResponse.html',
+        response='An error occurred while trying to log in.',
+        title='Error while logging in')
 
 
 @app.route("/logout")

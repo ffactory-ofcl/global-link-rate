@@ -10,11 +10,16 @@ def showProfile(username):
 
 def getUserinformation(username):
     userinformation = getRawUserdataFromDb(username)
-    _userid = userinformation['id']
+    #_userid = userinformation['id']
     _username = userinformation['username']
     _role = userinformation['role']
     _xp = userinformation['xp']
-    return User(_userid, _username, _role, _xp)
+    return User(_username, _role, _xp)  #_userid,
+
+
+def userExists(username):
+    return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+                      username) != ()
 
 
 def getRawUserdataFromDb(username):
@@ -32,11 +37,20 @@ def getUseridFromUsername(username):
                       username)[0]['id']
 
 
+def registerUser(username, password):
+    errorCode = 0
+    executeSql(
+        "INSERT INTO `users` (`username`,`password`, `role`, `xp`) VALUES ('{}','{}','{}','{}')",
+        (username, password, 'user', '0'))
+
+    return errorCode
+
+
 # class User(UserMixin):
 # pass
 
 #user = User()
 #user.id2 = 'ud'
-#print(user.id2)
+#print(userExists('ffactory'))
 #def gainXP(username):
 #   pass

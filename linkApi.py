@@ -10,7 +10,7 @@ def executeApiAction(functionName, arguments=None):
 
 
 def addRating(arguments):  #funNum: 1
-    errorCode = None  # 1: ok | 2: error in calculate | 3: page doesn't exist | 4: invalid arg
+    errorCode = None  # 1: ok | 2: error in calculate | 3: invalid arg type | 4: invalid rating | 5: invalid link
     #return (arguments)
     username = arguments[0]
     link = arguments[1]
@@ -24,23 +24,23 @@ def addRating(arguments):  #funNum: 1
     try:
         rated = int(rated)
     except:
-        errorCode = 4
+        errorCode = 3
         return {'errorCode': errorCode}
 
     if not check.RatingValidity(rated) == 1:
-        errorCode = 3
+        errorCode = 4
         return {'errorCode': errorCode}
 
     if not check.UrlValidity(link) == 1:
-        errorCode = 3
+        errorCode = 5
         return {'errorCode': errorCode}
-    userid = databaseConnection.executeSql(  #get user id
-        "SELECT `id` FROM `users` WHERE `username`='{}'", username)[0]['id']
+    #userid = databaseConnection.executeSql(  #get user id
+    #    "SELECT `id` FROM `users` WHERE `username`='{}'", username)[0]['id']
 
     #addRating
     databaseConnection.executeSql(  #add new input to db
-        "INSERT INTO `inputs` ( `userid`,`link`,`rating`) VALUES ('{}', '{}', '{}')",
-        (userid, link, rated))
+        "INSERT INTO `inputs` ( `username`,`link`,`rating`) VALUES ('{}', '{}', '{}')",
+        (username, link, rated))
 
     #calculateRating
     isInDbCode = check.IfisInRatingsDb(link)
