@@ -1,1 +1,1 @@
-flaskBackend.py
+web: gunicorn app:app --log-file=-
