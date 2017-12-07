@@ -1,5 +1,5 @@
-import urllib.request, urllib.error
-from databaseConnection import executeSql
+import urllib.request, urllib.error, sys
+from databaseConnection import executeMDb
 
 # def BeforeApi(link):
 #errorCode = None
@@ -13,17 +13,33 @@ from databaseConnection import executeSql
 def IfisInRatingsDb(link):
     #ConnectionToDb()
     errorCode = None  #0: unknown; 1:is in db; 2: isnt in db
-    fetchedResults = executeSql("SELECT * FROM `ratings` WHERE `link`='{}'",
-                                link)
-    if not fetchedResults:
+
+    try:
+        fetchedResults = executeMDb('ratings', 'find', {
+            'link': link
+        })['dbReturn'][0]
+        #print('result: ' + str(fetchedResults))
+        if not fetchedResults or fetchedResults == None or fetchedResults == '':
+            errorCode = 2
+        else:
+            errorCode = 1
+    except IndexError:
         errorCode = 2
-    else:
-        errorCode = 1
+    except:
+        print("Unexpected error:", str(sys.exc_info()[0]))
+        errorCode = 0
+    #fetchedResults = executeSql("SELECT * FROM `ratings` WHERE `link`='{}'",
+    #                            link)
+
     return errorCode
 
 
 def DbIsNotEmpty(table):
-    return executeSql("SELECT * from `{}`", table, 5) != ''
+    result = executeMDb(table, 'find', {})['dbReturn'][0]
+    return result != None and result != ''
+
+
+#SELECT * from `{}`", table, 5) != ''
 
 
 def CallerValidity(caller):
@@ -65,9 +81,12 @@ def UrlValidity(link):
 def UsernameAndPasswordValidity(username, password):
     #ConnectionToDb()
     errorCode = None  # 0: unknown; 1:username+pw correct; 2: no user with this name; 3: pw wrong
-    fetchedResults = executeSql("SELECT * FROM `users` WHERE `username`='{}'",
-                                username)
-    if fetchedResults == ():
+    #fetchedResults = executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+    #                            username)
+    fetchedResults = executeMDb('users', 'find', {
+        'username': username
+    })['dbReturn']
+    if fetchedResults == () or fetchedResults == None:
         errorCode = 2
     else:
         for row in fetchedResults:
@@ -79,11 +98,11 @@ def UsernameAndPasswordValidity(username, password):
 
 
 def IfUsernameIsInDatabase(username):
-    return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
-                      username) != ()
+    #return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+    #                  username) != (
+    return None
 
 
-# rating = ('2', '3')
-#print(RatingValidity(('3')))
-# if type(rating) == str:
-# rating = int(rating)
+#fetchedResults = executeMDb('inputs', 'find', {'link': 'http://youtube.com'},
+#                            2)['dbReturn'][5]
+#print(IfisInRatingsDb('http://youtube.com'))
