@@ -1,7 +1,7 @@
 #from flask import render_template
 #from flask import render_template
 from userClass import User
-from databaseConnection import executeSql
+from databaseConnection import executeMDb
 
 
 def showProfile(username):
@@ -18,30 +18,54 @@ def getUserinformation(username):
 
 
 def userExists(username):
-    return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
-                      username) != ()
+    errorCode = None  #0: unknown; 1:is in db; 2: isnt in db
+
+    try:
+        fetchedResults = executeMDb('users', 'find', {
+            'username': username
+        })['dbReturn'][0]
+        #print('result: ' + str(fetchedResults))
+        if not fetchedResults or fetchedResults == None or fetchedResults == '':
+            errorCode = 2
+        else:
+            errorCode = 1
+    except IndexError:
+        errorCode = 2
+    except:
+        #print("Unexpected error:", str(sys.exc_info()[0]))
+        errorCode = 0
+    return errorCode
+    #return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+    #                  username) != ()
 
 
 def getRawUserdataFromDb(username):
-    return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
-                      username)[0]
+    return executeMDb('users', 'find', {'username': username})['dbReturn'][0]
+    #return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+    #                  username)[0]
 
 
 def getUsernameFromId(userid):
-    return executeSql("SELECT username FROM `users` WHERE `id`='{}'",
-                      userid)[0]['username']
+    return executeMDb('users', 'find', {
+        'id': userid
+    })['dbReturn'][0]['username']
+    #return executeSql("SELECT username FROM `users` WHERE `id`='{}'",
+    #                  userid)[0]['username']
 
 
 def getUseridFromUsername(username):
-    return executeSql("SELECT id FROM `users` WHERE `username`='{}'",
-                      username)[0]['id']
+    return executeMDb('users', 'find', {
+        'username': username
+    })['dbReturn'][0]['userid']
+    #return executeSql("SELECT id FROM `users` WHERE `username`='{}'",
+    #                  username)[0]['id']
 
 
 def registerUser(username, password):
     errorCode = 0
-    executeSql(
-        "INSERT INTO `users` (`username`,`password`, `role`, `xp`) VALUES ('{}','{}','{}','{}')",
-        (username, password, 'user', '0'))
+    #executeSql(
+    #    "INSERT INTO `users` (`username`,`password`, `role`, `xp`) VALUES ('{}','{}','{}','{}')",
+    #    (username, password, 'user', '0'))
 
     return errorCode
 
@@ -51,6 +75,6 @@ def registerUser(username, password):
 
 #user = User()
 #user.id2 = 'ud'
-#print(userExists('ffactory'))
+print(userExists('ffactory2'))
 #def gainXP(username):
 #   pass
