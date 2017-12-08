@@ -10,12 +10,16 @@ def executeApiAction(functionName, arguments=None):
 
 
 def addRating(arguments):  #funNum: 1
-    errorCode = None  # 1: ok | 2: error in calculate | 3: invalid arg type | 4: invalid rating | 5: invalid link
-    #return (arguments)
+    # 1: ok | 2: error in calculate
+    # 3: invalid arg type 4: invalid rating
+    # 5: invalid link | 6: error in addrating
+    # 7: error while updating
+    errorCode = None
+
     username = arguments[0]
     link = arguments[1]
     rated = arguments[2]
-    #return str(type(rated))
+
     allLinkRating = 0
     allLinkRatingCount = 0
     rating = 0
@@ -38,56 +42,120 @@ def addRating(arguments):  #funNum: 1
     #    "SELECT `id` FROM `users` WHERE `username`='{}'", username)[0]['id']
 
     #addRating
-    databaseConnection.executeSql(  #add new input to db
-        "INSERT INTO `inputs` ( `username`,`link`,`rating`) VALUES ('{}', '{}', '{}')",
-        (username, link, rated))
+    if databaseConnection.executeMDb('inputs', 'insert', {
+            'username': username,
+            'link': link,
+            'rated': rated
+    })['errorCode'] != 1:
+        errorCode = 6
+        return {'errorCode': errorCode}
+    #databaseConnection.executeSql(  #add new input to db
+    #    "INSERT INTO `inputs` ( `username`,`link`,`rating`) VALUES ('{}', '{}', '{}')",
+    #    (username, link, rated))
 
     #calculateRating
     isInDbCode = check.IfisInRatingsDb(link)
+    #print('isindb: ' + str(isInDbCode))
     if isInDbCode == 1:  #updates link's entry
-        allLinkRatingAndCount = databaseConnection.executeSql(
-            "SELECT `allLinkRating`,`allLinkRatingCount` FROM `ratings` WHERE `link`='{}'",
-            link)
+        #print('updating link\'s entry')
+        #allLinkRatingAndCount = databaseConnection.executeSql(
+        #    "SELECT `allLinkRating`,`allLinkRatingCount` FROM `ratings` WHERE `link`='{}'",
+        #    link)
+
+        allLinkRatingAndCount = databaseConnection.executeMDb(
+            'ratings', 'find', {
+                'link': link
+            })['dbReturn']
+        #print(allLinkRatingAndCount[0]['allLinkRating'])
         allLinkRating = allLinkRatingAndCount[0]['allLinkRating']
         allLinkRatingCount = allLinkRatingAndCount[0]['allLinkRatingCount']
+        #print(allLinkRating)
         if allLinkRating == None or allLinkRatingCount == None:  #if link exists but has no alllinkrating/count
             allLinkRating = 0
             allLinkRatingCount = 0
-            result = databaseConnection.executeSql(
-                "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'",
-                link)
+            result = databaseConnection.executeMDb(
+                'inputs', 'find', {'link': link}, 'all')['dbReturn']
+            #result = databaseConnection.executeSql(
+            #    "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'",
+            #    link)
+            #CONTINUE HERE RERERERERREEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE (check if ratingcount is proper)
+            #print(allLinkRatingCount)
             for row in result:
-                allLinkRating = allLinkRating + float(row["rating"])
+                allLinkRating = allLinkRating + float(row['rating'])
                 allLinkRatingCount = allLinkRatingCount + 1
             rating = allLinkRating / allLinkRatingCount  #main rating for this link
-            databaseConnection.executeSql(
-                "INSERT INTO ratings (link,rating,allLinkRating,allLinkRatingCount) VALUES ('{}', '{}', '{}', '{}')",
-                (link, rating, allLinkRating, allLinkRatingCount))
-        else:
+            if databaseConnection.executeMDb(
+                    'ratings', 'insert', {
+                        'link': link,
+                        'rating': rating,
+                        'allLinkRating': allLinkRating,
+                        'allLinkRatingCount': allLinkRatingCount
+                    })['errorCode'] != 1:
+                errorCode = 7
+                return {'errorCode': errorCode}
+            #databaseConnection.executeSql(
+            #    "INSERT INTO ratings (link,rating,allLinkRating,allLinkRatingCount) VALUES ('{}', '{}', '{}', '{}')",
+            #    (link, rating, allLinkRating, allLinkRatingCount))
+        else:  #link exists and alllinkrating (+count) need to be updated
+            #print('alllinkr ' + str(allLinkRating))
             newAllLinkRating = allLinkRating + rated
             newAllLinkRatingCount = allLinkRatingCount + 1
+            #print('newalllinkr' + str(newAllLinkRating))
             #raise debugMe('debug')
             if allLinkRating == None or allLinkRating == 0 or allLinkRating == '' or allLinkRatingCount == None or allLinkRatingCount == 0 or allLinkRatingCount == '':
+                #print('ree somtingwong')
                 calculateLinkRating(link)
             else:
+                #print('allgoodmyboy')
                 rating = (newAllLinkRating) / (newAllLinkRatingCount)
-                databaseConnection.executeSql(
-                    "UPDATE ratings SET `rating`='{}', `allLinkRating`='{}', `allLinkRatingCount`='{}' WHERE link='{}'",
-                    (rating, newAllLinkRating, newAllLinkRatingCount, link))
+                #print('rating: ' + str(rating))
+                if databaseConnection.executeMDb(
+                        'ratings', 'update', [{
+                            'link': link
+                        }, {
+                            '$set': {
+                                'rating': rating,
+                                'allLinkRating': newAllLinkRating,
+                                'allLinkRatingCount': newAllLinkRatingCount
+                            }
+                        }])['errorCode'] != 1:
+                    errorCode = 7
+                    #return {'errorCode': errorCode}
+                #databaseConnection.executeSql(
+                #    "UPDATE ratings SET `rating`='{}', `allLinkRating`='{}', `allLinkRatingCount`='{}' WHERE link='{}'",
+                #   (rating, newAllLinkRating, newAllLinkRatingCount, link))
+        #print('yay me is done :)')
+        errorCode = 1
     elif isInDbCode == 2:  # recalculate from all input and insert new entry for new link
-        result = databaseConnection.executeSql(
-            "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'", link)
+        #print('recalculating link from all input')
+        result = databaseConnection.executeMDb(
+            'inputs', 'find', {'link': link}, 'all')['dbReturn']
+        #print(type(result))
+        #result = databaseConnection.executeSql(
+        #    "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'", link)
         for row in result:
-            allLinkRating = allLinkRating + float(row["rating"])
+            allLinkRating = allLinkRating + float(row['rated'])
             allLinkRatingCount = allLinkRatingCount + 1
         rating = allLinkRating / allLinkRatingCount  #main rating for this link
-        databaseConnection.executeSql(
-            "INSERT INTO ratings (link,rating,allLinkRating,allLinkRatingCount) VALUES ('{}', '{}', '{}', '{}')",
-            (link, rating, allLinkRating, allLinkRatingCount))
+        if databaseConnection.executeMDb(
+                'ratings', 'insert', {
+                    'link': link,
+                    'rating': rating,
+                    'allLinkRating': allLinkRating,
+                    'allLinkRatingCount': allLinkRatingCount
+                })['errorCode'] != 1:
+            errorCode = 5
+            #return {'errorCode': errorCode}
+            #databaseConnection.executeMDb('ratings','insert',{})
+            #databaseConnection.executeSql(
+            #    "INSERT INTO ratings (link,rating,allLinkRating,allLinkRatingCount) VALUES ('{}', '{}', '{}', '{}')",
+            #    (link, rating, allLinkRating, allLinkRatingCount))
+        errorCode = 1
     else:
+        #print('error while checking if is in ratingdb')
         errorCode = 0
 
-    errorCode = 1
+    #print('now returning ' + str(errorCode))
     return {'errorCode': errorCode}
 
 
@@ -95,14 +163,21 @@ def calculateLinkRating(arguments):
     link = arguments
     if isinstance(arguments, tuple):
         link = arguments[0]
-    errorCode = None  #1: ok; 2: url invalid
+    #print(link)
+    errorCode = None  #1: ok; 2: url invalid; 3: error while updating
     allLinkRating = 0
     allLinkRatingCount = 0
 
-    result = databaseConnection.executeSql(
-        "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'", link)
+    #result = databaseConnection.executeSql(
+    #    "SELECT `link`, `rating` FROM `inputs` WHERE `link`='{}'", link)
+    result = databaseConnection.executeMDb('inputs', 'find', {'link': link},
+                                           'all')['dbReturn']
+    #print(result[0])
+    #print(result[1])
+    #print(result[2])
     for row in result:
-        allLinkRating = allLinkRating + float(row["rating"])
+        #print(float(row['rated']))
+        allLinkRating = allLinkRating + float(row['rated'])
         allLinkRatingCount = allLinkRatingCount + 1
     if allLinkRating == None or allLinkRating == 0 or allLinkRating == '' or allLinkRatingCount == None or allLinkRatingCount == 0 or allLinkRatingCount == '':
         rating = 0
@@ -110,14 +185,35 @@ def calculateLinkRating(arguments):
         rating = allLinkRating / allLinkRatingCount  #main rating for this link
 
     isInDbCode = check.IfisInRatingsDb(link)
+    #print('isindb: ' + str(isInDbCode))
     if isInDbCode == 1:  #updates link's entry
-        databaseConnection.executeSql(
-            "UPDATE ratings SET rating='{}', allLinkRating='{}', allLinkRatingCount='{}' WHERE link='{}'",
-            (rating, allLinkRating, allLinkRatingCount, link))
+        #print(rating)
+        #print(allLinkRating)
+        #databaseConnection.executeSql(
+        #    "UPDATE ratings SET rating='{}', allLinkRating='{}', allLinkRatingCount='{}' WHERE link='{}'",
+        #    (rating, allLinkRating, allLinkRatingCount, link))
+        if databaseConnection.executeMDb('ratings', 'update', [{
+                'link': link
+        }, {
+                '$set': {
+                    'rating': rating,
+                    'allLinkRating': allLinkRating,
+                    'allLinkRatingCount': allLinkRatingCount
+                }
+        }])['errorCode'] != 1:
+            errorCode = 3
+            return {'errorCode': errorCode}
     elif isInDbCode == 2:  #inserts new entry for new link
-        databaseConnection.executeSql(
-            "INSERT INTO ratings (link,rating) VALUES ('{}', '{}')",
-            (link, rating))
+        databaseConnection.executeMDb(
+            'ratings', 'insert', {
+                'link': link,
+                'rating': rating,
+                'allLinkRating': allLinkRating,
+                'allLinkRatingCount': allLinkRatingCount
+            })
+        #databaseConnection.executeSql(
+        #    "INSERT INTO ratings (link,rating) VALUES ('{}', '{}')",
+        #    (link, rating))
     errorCode = 1
     return {'errorCode': errorCode}
 
@@ -126,9 +222,10 @@ def getLinkRating(link):
     errorCode = None
     rating = -1
     if check.IfisInRatingsDb(link):
-        result = databaseConnection.executeSql(
-            "SELECT `rating` FROM `ratings` WHERE `link`='{}'", link)
-        rating = result[0]['rating']
+        rating = databaseConnection.executeMDb('ratings', 'find', {
+            'link': link
+        })['dbReturn'][0]['rating']
+
         errorCode = 1
     else:
         errorCode = 0
@@ -139,8 +236,11 @@ def getTopLinkRatings():
     errorCode = None
     links = []
     if check.DbIsNotEmpty('ratings'):
-        result = databaseConnection.executeSql(
-            "SELECT * FROM `ratings` ORDER BY allLinkRating DESC", '', 3)
+        result = databaseConnection.executeMDb('ratings', 'find', {}, 'all',
+                                               ['allLinkRating', -1])
+        print('res: ' + str(result))
+        #result = databaseConnection.executeSql(
+        #    "SELECT * FROM `ratings` ORDER BY allLinkRating DESC", '', 3)
         for row in result:
             links.append(row)
     errorCode = 1
@@ -164,4 +264,6 @@ class debugMe(Exception):
     pass
 
 
-print(check.RatingValidity('3'))
+#getTopLinkRatings()
+#print(getLinkRating('http://youtube.com'))
+#print(calculateLinkRating('http://youtube.com'))

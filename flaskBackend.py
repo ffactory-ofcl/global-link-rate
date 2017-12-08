@@ -1,13 +1,14 @@
 from flask import Flask, render_template, request, redirect, jsonify
 import flask_login
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
-import linkApi, userApi, check, users, log
+import linkApi, userApi, check, users, log, parseConfig
 
 glrLinkApiPath = '/api/link/'
 glrUserApiPath = '/api/user/<string:username>/'
 
 app = Flask(__name__)
-app.secret_key = 'tis is ma suppa sekkret string that aint tooo short'  # todo: change for production
+app.secret_key = parseConfig.parse()['flask'][
+    'flaskSecretKey']  #secretkey from config  # todo: change for production
 login_manager = LoginManager()
 login_manager.init_app(app)
 
