@@ -11,11 +11,11 @@ def gainXp(arguments):
     errorCode = None
     username = arguments[0]
     reason = arguments[1]
-    amont = arguments[2]
+    amount = arguments[2]
 
     currentXP = executeSql("SELECT xp FROM `users` WHERE username = '{}'",
                            username)[0]['xp']
-    newXP = currentXP + amont
+    newXP = currentXP + amount
     #print(currentXP[0]['xp'])
     if executeSql("UPDATE users SET xp='{}' WHERE username='{}'",
                   (newXP, username)) == ():
