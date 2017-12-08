@@ -34,7 +34,7 @@ def readAndStoreOsVar():
             'flaskSecretKey': os.environ['flask-flaskSecretKey']
         },
         'mlab': {
-            'mlab-clientUrl': os.environ['mlab-clientUrl'],
+            'clientUrl': os.environ['mlab-clientUrl'],
             'username': os.environ['mlab-username'],
             'password': os.environ['mlab-password']
         }
