@@ -75,7 +75,7 @@ def registerUser(username, password):
 
 #user = User()
 #user.id2 = 'ud'
-print(userExists('ffactory2'))
+#print(userExists('ffactory2'))
 #def gainXP(username):
 #   pass
 
