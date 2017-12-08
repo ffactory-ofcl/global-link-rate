@@ -241,8 +241,8 @@ def getTopLinkRatings():
         #print('res: ' + str(result))
         #result = databaseConnection.executeSql(
         #    "SELECT * FROM `ratings` ORDER BY allLinkRating DESC", '', 3)
-        for row in result:
-            links.append(row['dbReturn']['link'])
+        for row in result['dbReturn']:
+            links.append(row['link'])
     errorCode = 1
     return {'errorCode': errorCode, 'links': links}
 

@@ -19,12 +19,12 @@ if __name__ == "__main__":
 # start frontend --------------------------------------------------------------
 @app.route('/')
 def index():
-    try:
-        username = flask_login.current_user.id
-    except:
-        username = 'anonymous_user'
-
-    return render_template('index.html', username=username)
+    #try:
+    #    username = flask_login.current_user.id
+    #except:
+    #    username = 'anonymous_user'
+    #return 'hello'
+    return render_template('index.html', username='ffactory')
 
 
 @app.route('/user/<string:username>')
