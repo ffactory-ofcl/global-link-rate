@@ -236,13 +236,13 @@ def getTopLinkRatings():
     errorCode = None
     links = []
     if check.DbIsNotEmpty('ratings'):
-        result = databaseConnection.executeMDb(
-            'ratings', 'find', {}, 'all', ['allLinkRating', -1]['dbReturn'])
+        result = databaseConnection.executeMDb('ratings', 'find', {}, 'all',
+                                               ['allLinkRating', -1])
         #print('res: ' + str(result))
         #result = databaseConnection.executeSql(
         #    "SELECT * FROM `ratings` ORDER BY allLinkRating DESC", '', 3)
         for row in result:
-            links.append(row['link'])
+            links.append(row['dbReturn']['link'])
     errorCode = 1
     return {'errorCode': errorCode, 'links': links}
 
