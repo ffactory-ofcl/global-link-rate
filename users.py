@@ -78,3 +78,5 @@ def registerUser(username, password):
 print(userExists('ffactory2'))
 #def gainXP(username):
 #   pass
+
+#cant update idk why
