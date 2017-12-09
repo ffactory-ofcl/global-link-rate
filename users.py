@@ -1,6 +1,6 @@
 #from flask import render_template
 #from flask import render_template
-from userClass import User
+#from userClass import User
 from databaseConnection import executeMDb
 
 
@@ -14,7 +14,7 @@ def getUserinformation(username):
     _username = userinformation['username']
     _role = userinformation['role']
     _xp = userinformation['xp']
-    return User(_username, _role, _xp)  #_userid,
+    return {'username': _username, 'role': _role, 'xp': _xp}  #_userid,
 
 
 def userExists(username):

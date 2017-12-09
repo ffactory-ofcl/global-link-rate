@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify
 import flask_login
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
-import linkApi, userApi, check, users, log, parseConfig
+import linkApi, userApi, users, log, parseConfig
 
 glrLinkApiPath = '/api/link/'
 glrUserApiPath = '/api/user/<string:username>/'
@@ -69,7 +69,10 @@ def addRating():
 @app.route(glrLinkApiPath + 'calculate', methods=['POST'])
 #@login_required
 def calculateLinkRating():
-    username = flask_login.current_user.id
+    try:
+        username = flask_login.current_user.id
+    except:
+        username = 'anonymous_user'
     link = request.json['link']
 
     apiResponse = linkApi.executeApiAction('calculateLinkRating', (link, ''))
@@ -82,7 +85,10 @@ def calculateLinkRating():
 @app.route(glrLinkApiPath + 'get', methods=['POST'])
 #@login_required
 def getLinkRating():
-    username = flask_login.current_user.id
+    try:
+        username = flask_login.current_user.id
+    except:
+        username = 'anonymous_user'
     link = request.json['link']
 
     apiResponse = linkApi.executeApiAction('getLinkRating', link)
