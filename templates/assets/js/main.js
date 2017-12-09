@@ -109,8 +109,8 @@ function generateTopLinkList() {
 					for(i=0;i<JSON.parse(this.responseText)['links'].length;i++){
 						var parentElement = document.createElement('li');
 						var element = document.createElement('a');
-						element.innerText = JSON.parse(this.responseText)['links'][i]['link'];
-						element.href = JSON.parse(this.responseText)['links'][i]['link'];
+						element.innerText = JSON.parse(this.responseText)['links'][i];
+						element.href = JSON.parse(this.responseText)['links'][i];
 						parentElement.appendChild(element);
 						document.getElementsByClassName("toplinks")[0].appendChild(parentElement)
 					}

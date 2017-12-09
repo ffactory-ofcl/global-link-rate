@@ -78,31 +78,20 @@ def UrlValidity(link):
     return errorCode
 
 
-def UsernameAndPasswordValidity(username, password):
-    #ConnectionToDb()
-    errorCode = None  # 0: unknown; 1:username+pw correct; 2: no user with this name; 3: pw wrong
-    #fetchedResults = executeSql("SELECT * FROM `users` WHERE `username`='{}'",
-    #                            username)
-    fetchedResults = executeMDb('users', 'find', {
-        'username': username
-    })['dbReturn']
-    if fetchedResults == () or fetchedResults == None:
-        errorCode = 2
-    else:
-        for row in fetchedResults:
-            if row['password'] == password:
-                errorCode = 1
-            else:
-                errorCode = 3
-    return errorCode
-
-
-def IfUsernameIsInDatabase(username):
-    #return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
-    #                  username) != (
-    return None
-
+# def IfUsernameIsInDatabase(username):
+# errorCode = None
+# try:
+# executeMDb('users', 'find', {
+# "username": username
+# })['dbReturn'][0]['username']
+# errorCode = 1
+# except IndexError:
+# errorCode = 2
+# except:
+# errorCode = 0
+#return executeSql("SELECT * FROM `users` WHERE `username`='{}'",
+#                username) != (
+# return errorCode
 
 #fetchedResults = executeMDb('inputs', 'find', {'link': 'http://youtube.com'},
 #                            2)['dbReturn'][5]
-#print(IfisInRatingsDb('http://youtube.com'))

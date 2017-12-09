@@ -63,10 +63,40 @@ def getUseridFromUsername(username):
 
 def registerUser(username, password):
     errorCode = 0
-    #executeSql(
-    #    "INSERT INTO `users` (`username`,`password`, `role`, `xp`) VALUES ('{}','{}','{}','{}')",
-    #    (username, password, 'user', '0'))
+    if userExists(username) != 1:
+        executeMDb('users', 'insert', {
+            'username': username,
+            'password': password,
+            'role': 'user',
+            'xp': 0
+        })
+        errorCode = 1
+    else:
+        errorCode = 2
+    #executeSql("INSERT INTO `users` (`username`,`password`, `role`, `xp`) VALUES ('{}','{}','{}','{}')",(username, password, 'user', '0'))
+    return errorCode
 
+
+def UsernameAndPasswordValidity(username, password):
+    #ConnectionToDb()
+    errorCode = None  # 0: unknown; 1:username+pw correct; 2: no user with this name; 3: pw wrong
+    fetchedResult = None
+    #fetchedResults = executeSql("SELECT * FROM `users` WHERE `username`='{}'",username)
+    try:
+        fetchedResult = executeMDb('users', 'find', {
+            'username': username
+        })['dbReturn'][0]
+    except IndexError:
+        errorCode = 2
+        return errorCode
+    except:
+        errorCode = 0
+        return errorCode
+
+    if fetchedResult['password'] == password:
+        errorCode = 1
+    else:
+        errorCode = 3
     return errorCode
 
 
@@ -78,5 +108,5 @@ def registerUser(username, password):
 #print(userExists('ffactory2'))
 #def gainXP(username):
 #   pass
-
-#cant update idk why
+#print(UsernameAndPasswordValidity('ffactory', 'wiu3on'))
+#print(registerUser('reee', 'peet'))
