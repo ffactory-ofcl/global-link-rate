@@ -235,14 +235,19 @@ def getLinkRating(link):
 def getTopLinkRatings():
     errorCode = None
     links = []
+    howMany = 5
     if check.DbIsNotEmpty('ratings'):
         result = databaseConnection.executeMDb('ratings', 'find', {}, 'all',
                                                ['allLinkRating', -1])
         #print('res: ' + str(result))
         #result = databaseConnection.executeSql(
         #    "SELECT * FROM `ratings` ORDER BY allLinkRating DESC", '', 3)
+        i = 0
         for row in result['dbReturn']:
             links.append(row['link'])
+            i = i + 1
+            if i >= howMany:
+                break
     errorCode = 1
     return {'errorCode': errorCode, 'links': links}
 

@@ -24,13 +24,7 @@ def index():
     except:
         username = 'anonymous_user'
     #return 'hello'
-    return render_template('index.html', username=username)
-
-
-@app.route('/user/<string:username>')
-def showProfile(username):
-    currentUser = users.showProfile(username)
-    return render_template('userprofile.html', user=currentUser)
+    return render_template('indexTemplate.html', username=username)
 
 
 @app.route('/protected')
@@ -44,7 +38,7 @@ def protected():
 
 # start link api --------------------------------------------------------------
 @app.route(glrLinkApiPath + 'rate', methods=['POST'])
-#@login_required
+@login_required
 def addRating():
     try:
         username = flask_login.current_user.id
@@ -67,7 +61,7 @@ def addRating():
 
 
 @app.route(glrLinkApiPath + 'calculate', methods=['POST'])
-#@login_required
+@login_required
 def calculateLinkRating():
     try:
         username = flask_login.current_user.id
@@ -83,7 +77,7 @@ def calculateLinkRating():
 
 
 @app.route(glrLinkApiPath + 'get', methods=['POST'])
-#@login_required
+@login_required
 def getLinkRating():
     try:
         username = flask_login.current_user.id
@@ -117,7 +111,14 @@ def getTopLinkRatings():
 # start user api --------------------------------------------------------------
 
 
+@app.route('/user/<string:username>')
+def showProfile(username):
+    currentUser = users.showProfile(username)
+    return render_template('userprofile.html', user=currentUser)
+
+
 @app.route(glrUserApiPath + 'gainXp/r=<reason>&a=<int:amount>')
+@login_required
 def gainXp(username, reason, amount):
     return jsonify(
         userApi.executeApiAction('gainXp', (username, reason, amount)))
@@ -164,7 +165,9 @@ def request_loader(request):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('register.html')
+        #return render_template('register.html')
+        return render_template(
+            'loginRegisterTemplate.html', formAction='register')
     username = request.form['username']
     password = request.form['password']
     errorCode = 0
@@ -176,19 +179,19 @@ def register():
         user.id = username
         login_user(user)
         return render_template(
-            'simpleResponse.html',
+            'simpleResponseTemplate.html',
             response='Registered ' + flask_login.current_user.id,
             title='Registered'
         )  #'<p>Logged in as ' + flask_login.current_user.id + '</p>'
     elif errorCode == 2:
         return render_template(
-            'simpleResponse.html',
+            'simpleResponseTemplate.html',
             response=
             'An error occurred while trying to register. The username is already taken',
             title='Error while registering')
     else:
         return render_template(
-            'simpleResponse.html',
+            'simpleResponseTemplate.html',
             response='An error occurred while trying to register.',
             title='Error while registering')
 
@@ -196,7 +199,8 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template(
+            'loginRegisterTemplate.html', formAction='login')
     # '''
     # <form action='login' method='POST'>
     # <input type='text' name='username' id='username' placeholder='username'/>
@@ -215,13 +219,13 @@ def login():
         username = flask_login.current_user.id
         log.writeLog(username, 'Log in.', 1)
         return render_template(
-            'simpleResponse.html',
+            'simpleResponseTemplate.html',
             response='You were logged in as ' + flask_login.current_user.id,
             title='Logged in.'
         )  #'<p>Logged in as ' + flask_login.current_user.id + '</p>'
     log.writeLog(username, 'Log in.', 0)
     return render_template(
-        'simpleResponse.html',
+        'simpleResponseTemplate.html',
         response='An error occurred while trying to log in.',
         title='Error while logging in')
 
@@ -231,7 +235,8 @@ def login():
 def logout():
     logout_user()
     return render_template(
-        'simpleResponse.html', response='Logged out',
+        'simpleResponseTemplate.html',
+        response='You have been logged out',
         title='Logged out.')  #Response('<p>Logged out</p>')
 
 

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% endblock %}
+{% block main_panel_title %}{{title}}{% endblock %}
+
+{% if page=='rated' %} {% set response='Thank you for rating!' %} {% endif %}
+{% if page=='calculated' %} {% set response='Rating has been calculated.' %} {% endif %}<!-- continue here  -->
+{% if page=='rating' %} {% set response='The rating for {{link}} is {{rating}}' %} {% endif %}
+
+{% block main_panel_body %}
+<div class="row">
+	<div class="col-md-10">
+		<p>{{response}}</p>
+	</div>
+	<div class="col-md-2">
+		<a href="/" autofocus>Go back</a>
+	</div>
+</div>
+{% endblock %}

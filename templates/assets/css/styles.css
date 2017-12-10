@@ -82,6 +82,10 @@ div.separatorLabel{
   margin-bottom:0.3em;
 }
 
+#login-warning{
+  font-size: 17px;
+}
+
 
 button.btn.btn-default.float-right{
   float:right;

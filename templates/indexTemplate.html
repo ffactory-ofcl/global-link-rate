@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock %}
+{% block main_panel_title %}Select page{% endblock %}
+
+{% block main_panel_body %}
+<form onsubmit="">
+	<div class="row">
+		<div class="col-md-10 col-sm-10 col-xs-10">
+			<div class="separator">
+				<input class="form-control" id="linktextbox" autocomplete="on" type="url" inputmode="url"
+				placeholder="http://SomePage.com/ThatBlogEntry.html" onchange="linktextboxChanged();" autofocus tabindex="1">
+			</div>
+		</div>
+		<!--div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
+			<div class="separator">
+				<button class="btn btn-default float-right" type="submit">Select </button>
+			</div>
+		</div-->
+	</div>
+</form>
+<form onsubmit="addLinkRating();return false;">
+	<div class="row">
+		<div class="col-md-2 col-sm-2 col-xs-3">
+			<div class="separatorLabel">
+				<label class="floating">Rate (0-10)</label>
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-7">
+			<div class="separator">
+				<input class="form-control" type="text" id="ratingtextbox" autocomplete="off" tabindex="2">
+			</div>
+		</div>
+		<div class="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+			<div class="separator">
+				<button class="btn btn-default textboxbutton" type="submit" tabindex="3">Rate</button>
+			</div>
+		</div>
+	</div>
+</form>
+<div class="row spacer">
+	<div class="col-md-12">
+		<hr>
+	</div>
+</div>
+<form>
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<!--
+			<div class="separator inline">
+				<button class="btn btn-default" type="button" onclick="calculateRating()">Calculate </button>
+			</div>
+			<div class="hseparator"></div>-->
+			<div class="separator inline">
+				<button class="btn btn-default" type="button" onclick="getRating()" tabindex="4">Get user Rating</button>
+			</div>
+		</div>
+	</div>
+</form>
+{% endblock %}

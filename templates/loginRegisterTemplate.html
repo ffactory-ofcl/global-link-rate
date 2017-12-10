@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% if formAction=='login' %}
+	{% set title='Log in' %}
+{% elif formAction=='register' %}
+	{% set title='Register' %}
+{% endif %}
+
+{% block title %}{{title}}{% endblock %}
+{% block main_panel_title %}{{title}}{% endblock %}
+
+
+{% block main_panel_body %}
+<form method="POST" action='login'>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="separator">
+					<h5 id='login-warning'>Your password will be
+						<strong>transmitted and stored</strong>
+						in cleartext. If you don't know what that means don't log in or register.
+					</h5>
+			</div>
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+			<div class="separator">
+				<label class="control-label">Username: </label>
+			</div>
+		</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+			<div class="separator">
+				<input name='username' class="form-control" type="text" autofocus>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+			<div class="separator">
+				<label class="control-label">Password: </label>
+			</div>
+		</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+			<div class="separator">
+				<input name='password' class="form-control" type="password">
+			</div>
+		</div>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="separator">
+				<button class="btn btn-default float-right" type="submit">Log in </button>
+			</div>
+		</div>
+	</div>
+</form>
+
+{#<div class="row">
+		<div class="col-lg-12">
+				<div class="separator">
+						<h5 id='login-warning'>Your password will be <strong>transmitted and stored</strong> in cleartext. If you don't know what that means don't log in or register.</h5>
+				</div>
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+				<div class="separator">
+						<label class="control-label">Username: </label>
+				</div>
+		</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+				<div class="separator">
+						<input name='username' class="form-control" type="text" autofocus>
+				</div>
+		</div>
+</div>
+<div class="row">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+				<div class="separator">
+						<label class="control-label">Password: </label>
+				</div>
+		</div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+				<div class="separator">
+						<input name='password' class="form-control" type="password">
+				</div>
+		</div>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="separator">
+					<button class="btn btn-default float-right" type="submit">{{title}}</button>
+				</div>
+		</div>
+</div>
+#}
+{% endblock %}

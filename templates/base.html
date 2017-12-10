@@ -3,14 +3,15 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Global Link Rate</title>
-	<!--link rel="shortcut icon" href="{ url_for('static', filename='assets/img/favicon-512.ico') }"-->
+	<title>{% block title %}{% endblock %} - Global Link Rate</title>
+	<link rel="shortcut icon" href="{#{ url_for('static', filename='favicon.ico') }#}/static/favicon.ico">
 	<style type="text/css">{% include "assets/bootstrap/css/bootstrap.min.css" %}/</style>
 	<style type="text/css">{% include "assets/css/styles.css" %}/</style>
 	<!--script src="https://cdn.rawgit.com/lesander/console.history/v1.4.0/console-history.min.js"></script-->
 </head>
 
 <body>
+	{% block overlay %}
 	<div class="overlay" onclick="">
 		<div class=" container">
 			<div class="col-md-12 t-m-4">
@@ -32,6 +33,8 @@
 			</div>
 		</div>
 	</div>
+	{% endblock %}
+	{% block header %}
 	<div class="container">
 			<div class="col-md-12">
 					<div class="page-header">
@@ -39,77 +42,35 @@
 			</div>
 			<div class="col-lg-5 col-md-4 col-xs-8" id="login-out-column">
 					<div class="separator2">
-						{% if username=='anonymous_user' %} <a href="/login" id="btn-login" class="headerLink" tabindex="5">Login </a>
+					{% if (username=='anonymous_user') or (username=='') or (username==none) %}
+						<a href="/login" id="btn-login" class="headerLink" tabindex="5">Login</a>
 						<a href='/register' id = id="btn-register" class="headerLink" tabindex="5">Register</a>
-						{% else %} <a href="/logout" id="btn-logout" class="headerLink" tabindex="6">Logout </a>{% endif %}
+					{% else %}
+						<a href="/logout" id="btn-logout" class="headerLink" tabindex="6">Logout</a>
+					{% endif %}
+					{# {username} #}
 					</div>
 			</div>
 	</div>
-	</div>
+	{% endblock %}
 	<div class="container">
 		<div class="col-md-12">
+			{% block main_panel %}
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">Select page</h3></div>
-					<div class="panel-body">
-						<form onsubmit="">
-							<div class="row">
-								<div class="col-md-10 col-sm-10 col-xs-10">
-									<div class="separator">
-										<input class="form-control" id="linktextbox" autocomplete="on" type="url" inputmode="url"
-										placeholder="http://SomePage.com/ThatBlogEntry.html" onchange="linktextboxChanged();" autofocus tabindex="1">
-									</div>
-								</div>
-								<!--div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
-									<div class="separator">
-										<button class="btn btn-default float-right" type="submit">Select </button>
-									</div>
-								</div-->
-							</div>
-						</form>
-						<form onsubmit="addLinkRating();return false;">
-							<div class="row">
-								<div class="col-md-2 col-sm-2 col-xs-3">
-									<div class="separatorLabel">
-										<label class="floating">Rate (0-10)</label>
-									</div>
-								</div>
-								<div class="col-md-8 col-sm-8 col-xs-7">
-									<div class="separator">
-										<input class="form-control" type="text" id="ratingtextbox" autocomplete="off" tabindex="2">
-									</div>
-								</div>
-								<div class="col-lg-1 col-md-2 col-sm-2 col-xs-4">
-									<div class="separator">
-										<button class="btn btn-default textboxbutton" type="submit" tabindex="3">Rate</button>
-									</div>
-								</div>
-							</div>
-						</form>
-						<div class="row spacer">
-							<div class="col-md-12">
-								<hr>
-							</div>
-						</div>
-						<form>
-							<div class="row">
-								<div class="col-md-12 col-xs-12">
-									<!--
-									<div class="separator inline">
-										<button class="btn btn-default" type="button" onclick="calculateRating()">Calculate </button>
-									</div>
-									<div class="hseparator"></div>-->
-									<div class="separator inline">
-										<button class="btn btn-default" type="button" onclick="getRating()" tabindex="4">Get user Rating</button>
-									</div>
-								</div>
-							</div>
-						</form>
+						<h3 class="panel-title">
+							{% block main_panel_title %}{% endblock %}
+						</h3>
 					</div>
-				</div>
-				<div class="panel panel-default">
+					<div class="panel-body">
+						{% block main_panel_body %}{% endblock %}
+						</div>
+					</div>
+					{% endblock %}
+					{% block toplinks %}
+					<div class="panel panel-default">
 					    <div class="panel-heading">
-					        <h3 class="panel-title">Top three links of all time</h3></div>
+					        <h3 class="panel-title">Top five links of all time</h3></div>
 					    <div class="panel-body">
 					        <div class="row">
 					            <div class="col-md-12">
@@ -121,6 +82,7 @@
 					    </div>
 					</div>
 				</div>
+				{% endblock %}
 			</form>
 		</div>
 	</div>

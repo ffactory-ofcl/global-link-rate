@@ -10,68 +10,72 @@
 
 <body>
 	<div class="container">
-				<div class="col-md-12">
-						<div class="page-header">
-								<h3 onclick="window.location='/'"><div class="page-main-header">Global Link Rate</div><small> Rate your most and least favorite pages</small></h3></div>
-				</div>
-				<div class="col-lg-5 col-md-4 col-xs-8" id="login-out-column">
-						<div class="separator2"><a href="/register" id="btn-login" class="headerLink">Register </a></div>
-				</div>
+		<div class="col-md-12">
+			<div class="page-header">
+				<h3 onclick="window.location='/'">
+					<div class="page-main-header">Global Link Rate</div><small> Rate your most and least favorite pages</small>
+				</h3>
+			</div>
 		</div>
-		<div class="container">
-				<div class="col-md-12">
-						<form method="POST" action='login'>
-								<div class="form-group">
-										<div class="panel panel-default">
-												<div class="panel-heading">
-														<h3 class="panel-title">Login</h3></div>
-												<div class="panel-body">
-														<div class="row">
-																<div class="col-lg-12">
-																		<div class="separator">
-																				<h4>Your password will be <strong>transmitted and stored</strong> in cleartext. If you don't know what that means don't log in or register.</h4>
-																		</div>
-																</div>
-																<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
-																		<div class="separator">
-																				<label class="control-label">Username: </label>
-																		</div>
-																</div>
-																<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-																		<div class="separator">
-																				<input name='username' class="form-control" type="text" autofocus>
-																		</div>
-																</div>
-														</div>
-														<div class="row">
-																<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
-																		<div class="separator">
-																				<label class="control-label">Password: </label>
-																		</div>
-																</div>
-																<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-																		<div class="separator">
-																				<input name='password' class="form-control" type="password">
-																		</div>
-																</div>
-																<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-																		<div class="separator">
-																				<button class="btn btn-default float-right" type="submit">Log in </button>
-																		</div>
-																</div>
-														</div>
-												</div>
-										</div>
-								</div>
-						</form>
-				</div>
+		<div class="col-lg-5 col-md-4 col-xs-8" id="login-out-column">
+			<div class="separator2">
+				<a href="/register" id="btn-login" class="headerLink">Register </a>
+			</div>
+		</div>
 	</div>
 	<div class="container">
-    <footer>
-        <div class="container">
-            <p>Help me make this project even better! <a href="http://github.com/ffactory-ofcl/global-link-rate" target="_blank">Click here to open Github</a></p>
-        </div>
-    </footer>
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Login</h3>
+				</div>
+				<div class="panel-body">
+					<form method="POST" action='login'>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="separator">
+									<h4>Your password will be <strong>transmitted and stored</strong> in cleartext. If you don't know what that means don't log in or register.</h4>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+								<div class="separator">
+									<label class="control-label">Username: </label>
+								</div>
+							</div>
+							<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+								<div class="separator">
+									<input name='username' class="form-control" type="text" autofocus>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+								<div class="separator">
+									<label class="control-label">Password: </label>
+								</div>
+							</div>
+							<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+								<div class="separator">
+									<input name='password' class="form-control" type="password">
+								</div>
+							</div>
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="separator">
+									<button class="btn btn-default float-right" type="submit">Log in </button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<footer>
+			<div class="container">
+				<p>Help me make this project even better! <a href="http://github.com/ffactory-ofcl/global-link-rate" target="_blank">Click here to open Github</a></p>
+			</div>
+		</footer>
 	</div>
 	<script type="text/javascript">{% include "assets/js/jquery.min.js" %}</script>
 	<script type="text/javascript">{% include "assets/bootstrap/js/bootstrap.min.js" %}</script>
